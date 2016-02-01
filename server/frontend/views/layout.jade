@@ -1,0 +1,20 @@
+block vars
+doctype html
+| <!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+| <!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+| <!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+html(lang="en",ng-app=ngapp)
+  head
+    meta(charset="utf-8")
+    title= (title ? title : 'ReadStarred')
+
+    //- Metas
+    meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
+    meta(name="author", content="Gunar C. Gessner, Leonardo K. Kewitz")
+    block metas
+
+    | <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+    block head
+
+  body(ng-class="ngMenu")
+    block body

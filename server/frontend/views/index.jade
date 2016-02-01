@@ -1,0 +1,24 @@
+extends layout
+
+//- Metas
+block metas
+  meta(name="description", content="Twitter-native Read Later Webapp")
+
+//- Head
+block head
+  script(src='/index.js')
+  link(rel="stylesheet", media="all", type="text/css", href="//cdn.materialdesignicons.com/1.2.65/css/materialdesignicons.min.css")
+  // link(rel="stylesheet", media="all", type="text/css", href="/css/style.min.css")
+
+//- Index Layout
+block body
+  header.vsplit
+    .left.side.animated.fadeIn(style="background-image: url('/images/hipster_color1920.jpg')")
+    .right.side
+      .title.animated.fadeInRight
+        h1 And if you could use your Twitter timeline to save and read your favorite articles?
+        p With ReadStarred you can save your tweets to read them latter, sign-up free!
+        p
+          a(href="/auth").btn.btn-primary 
+            i.mdi.mdi-twitter
+            |  Sign in with Twitter

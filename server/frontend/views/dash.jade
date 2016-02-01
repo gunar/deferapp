@@ -1,0 +1,29 @@
+extends layout
+block vars
+  - var ngapp = "app"
+  - var title="Dash"
+
+//- Head
+block head
+  //- Stylesheets
+  link(rel="stylesheet", media="all", type="text/css", href="//cdn.materialdesignicons.com/1.2.65/css/materialdesignicons.min.css")
+
+  //- High Priority JavaScript
+  script(src='//ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js')
+  // script(src='//ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-route.js')
+  // script(src="//cdnjs.cloudflare.com/ajax/libs/angular-route-segment/1.5.0/angular-route-segment.min.js")
+
+  script(src='/app.js')
+
+block body
+  body.menu-transition
+    div.content(app-view-segment="0")
+    ul#menu.navmenu.menu-transition(ng-class="ngMenu", ng-mouseleave="ngMenu=''")
+      li.brand
+      li
+        a(href="#{{'inbox' | routeSegmentUrl}}") Inbox
+      li
+        a(href="#{{'archive' | routeSegmentUrl}}") Archive
+    nav#menubutton.fixedButton
+      a.menu-transition(ng-click="ngMenu='open'")
+        i.mdi.mdi-menu

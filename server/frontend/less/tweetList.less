@@ -1,0 +1,133 @@
+@import (reference) "app.less";
+
+div.tweetList {
+  width: 100%;
+  @profilesize: 48px;
+
+  .tweet {
+    margin:0.5rem 0;
+    padding: 0.5rem;
+    position: relative;
+    width: 100%;
+    min-height: 6rem;
+    cursor: pointer;
+
+    &:hover {
+      background: darken(white, 2%);
+
+      .msg, img.profile {
+        opacity: 1;
+      }
+      .infos .extra {
+        visibility: visible;
+      }
+    }
+
+    &.marked {
+      background-color: fade(@color-primary-0, 5%);
+
+      .avatar {
+        img {
+          visibility: hidden;
+        }
+        .checkbox {
+          visibility: visible;
+          .blank {
+            display: none;
+          }
+          .marked {
+            display: block;
+          }
+        }
+      }
+    }
+
+    .avatar {
+      &:hover {
+        img {
+          visibility: hidden;
+        }
+        .checkbox {
+          visibility: visible;
+        }
+      }
+
+      .checkbox {
+        @size: @profilesize;
+        width:  @size;
+        height: @size;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+        position: absolute;
+        font-size: 2rem;
+        visibility: hidden;
+
+        .marked, .blank {
+          line-height: @size;
+        }
+
+        .marked {
+          display: none;
+        }
+      }
+
+      img.profile {
+        float: left;
+        width: @profilesize;
+        height: @profilesize;
+        border-radius: 50%;
+      }
+    } // .avatar
+
+    p {
+      line-height: 24px;
+      margin: 0 0 0 58px;
+    }
+
+    .msg, .profile {
+      opacity: 0.8;
+    }
+
+    .msg {
+      font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    }
+
+    .infos {
+      .extra {
+        visibility: hidden;
+      }
+
+      .name, .user {
+        font-size: 1.4rem;
+      }
+
+      .time {
+        &:before {
+          content: " \00B7 ";
+        }
+      }
+      .favs, .retweets {
+        &:before {
+          content: "  ";
+        }
+      }
+
+      .time {
+        font-size: 1.3rem;
+      }
+    } // .infos
+
+    .media {
+      margin-top: 1rem;
+      text-align: center;
+
+      img {
+        max-width: 100%;
+        border-radius: 4px;
+        border: 1px solid #ddd;
+        padding: 4px;
+      }
+    }
+  }
+}
