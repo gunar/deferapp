@@ -28,6 +28,7 @@ mongoose.connect(config.db);
 config.load_models();
 var User = mongoose.model('User');
 var Tweet = mongoose.model('Tweet');
+var TagList = mongoose.model('TagList');
 
 
 // Clear console
@@ -105,13 +106,22 @@ var getRateLimit = function (user) {
 
 var getRange = function (user) {
   var uid = user.uid;
-  var query = { $or : [ {'uids.starred': { $all: [uid] } }, {'uids.archived': { $all: [uid] } } ] };
+  var query = { uid: user.uid };
   logger.debug(user.uid + ' Querying DB for tweets from user');
 
-  return _(Tweet.find(query).sort('-tweet.id').skip(100).limit(1).lean().exec().then(function (tweet) {
-    if (tweet && tweet[0] && tweet[0].tid) user.since_id = tweet[0].tid;
-    return user;
-  }));
+  return _(
+    TagList
+      .find(query)
+      .sort('-tid')
+      .skip(100)
+      .limit(1)
+      .lean()
+      .exec()
+      .then(function (tweet) {
+        if (tweet && tweet[0] && tweet[0].tid) user.since_id = tweet[0].tid;
+        return user;
+      })
+  );
 };
 
 var requestFavorites = function (user) {
@@ -123,6 +133,7 @@ var requestFavorites = function (user) {
   logger.debug(user.uid + ' Trying to request favs from user since_id ' + (options.since_id || 0));
   return get(user, 'favorites/list', options)
     .map(function (favs) {
+      logger.info('Got ' + favs.length + 'favs');
       if (!favs.length) {
         return _(function (push, next) {
           push({ uid:user.uid, code: NO_TWEET });
@@ -135,40 +146,70 @@ var requestFavorites = function (user) {
 };
 
 var storeFav = function (tweet) {
-  return _(Tweet.findOne({tid: tweet.content.id}).exec()).flatMap(function (stored) {
+  return _(
+    Tweet
+      .findOne({tid: tweet.content.id})
+      .exec()
+  ).flatMap(function (stored) {
+
+    var newTweet;
     var tid = tweet.content.id;
     var uid = tweet.uid;
-    // Tweet not yet stored
+
     if (!stored) {
-      var newTweet = new Tweet({
+      // Tweet not yet stored
+      newTweet = new Tweet({
         tid: tid,
-        uids: {
-          starred: [ uid ],
-          archived: []
-        },
         tweet: tweet.content,
         parsed: {}
       });
       logger.debug('New tweet\t', + tid);
-      return _(newTweet.save().then(function () { return {uid: tweet.uid }; }));
+
+    } else {
+      // Tweet already stored
+      newTweet = stored;
+      newTweet.tweet = tweet.content;
+      logger.debug('Updating tweet ' + tid);
     }
-    // Tweet already stored
-    // TODO: Should update stored tweet, in order to update edits/retweets/favs
-    else {
-      var uids = stored.uids;
-      logger.debug('Got old tweet\t', + tid);
-      if (uids.starred.indexOf(uid) == -1 && uids.archived.indexOf(uid) == -1) {
-        logger.debug('   Added uid ' + uid);
-        stored.uids.starred.push(uid);
-        return _(stored.save().then(function () { return { uid: tweet.uid }; }));
-      }
-      return _([{ uid: tweet.uid }]);
+    return _(newTweet.save().then(function () { return { uid: uid, tid: tid  }; }));
+  });
+};
+
+var storeTagList = function (tweet) {
+  return _(
+    TagList
+      .findOne({
+        uid: tweet.uid,
+        tid: tweet.tid,
+      })
+      .exec()
+  ).flatMap(function (stored) {
+    var newTagList;
+
+    if (!stored) {
+      newTagList = new TagList({
+          uid: tweet.uid,
+          tid: tweet.tid,
+      });
+      return _(
+        newTagList
+          .save()
+          .then(
+            function (tagList) {
+              logger.debug('New tagList');
+              return { uid: tagList.uid, tid: tagList.tid };
+            }
+          )
+      );
     }
+
+    logger.debug('TagList already exists');
+    return _([{ uid: tweet.uid, tid: tweet.tid }]);
   });
 };
 
 
-var _client = _(getUser)
+var _favs = _(getUser)
   // { uid: Number, tokens: {} }
   .map(getClient)
   // { uid: Number, twitterGet: [Function] }
@@ -177,8 +218,9 @@ var _client = _(getUser)
   .flatMap(getRange)
   // { uid: Number, twitterGet: [Function], rate_limit: Number[, since_id: Number] };
   .map(requestFavorites).parallel(1)
-  // [{ uid: Number, tweet: {} }]
+  // [{ uid: Number, tweet: {} }, ...]
   .flatMap(storeFav)
+  .flatMap(storeTagList)
   .errors(function (err, push) {
     if (err && err.uid && err.code) {
       push(null, err);
