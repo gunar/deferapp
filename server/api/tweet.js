@@ -9,9 +9,42 @@ const api = express.Router();
 var ENV = process.env.NODE_ENV || 'development';
 var PAGE_LENGTH = 20
 
+const filterObject = (obj, keys) => 
+  Object.keys(obj)
+    .filter(k => keys.indexOf(k) > -1)
+    .reduce((acc, key) => {
+      acc[key] = obj[key];
+      return acc;
+    }, {})
+    ;
+
+
 const unwindTweet = t => {
-  return Object.assign(t.tweet.tweet,
-    { tid: t.tid, uid: t.uid, tags: t.tags });
+  const fullTweet = t.tweet.tweet;
+  const tweet = filterObject(fullTweet, [
+    'favorite_count',
+    'retweet_count',
+    'text',
+    'created_at',
+  ]);
+  const user = filterObject(fullTweet.user, [
+    'profile_image_url_https',
+    'screen_name',
+    'name',
+  ]);
+
+  var url = '';
+  if (fullTweet.entities && fullTweet.entities.urls && fullTweet.entities.urls.length) {
+    url = fullTweet.entities.urls[0].expanded_url;
+  }
+
+  return {
+    tid: t.tid,
+    tags: t.tags,
+    tweet,
+    user,
+    url,
+  };
 };
 
 api.get('/tweet/:page', passport.authOnly,
