@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-// import VisibleTweetsList from 'VisibleTweetsList';
+import VisibleTweetsList from './VisibleTweetsList';
 
 class App extends Component {
   componentDidMount() {
@@ -18,7 +18,7 @@ class App extends Component {
         <div
           style={{ marginTop: '1.5em' }}
         >
-          {/* <VisibleTweetsList /> */}
+          <VisibleTweetsList />
         </div>
       </div>
     );

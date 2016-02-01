@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 // import TweetTagList from '../containers/TweetTagList';
 
 const Tweet = ({
-  // id,
+  tid,
   // tags,
   // value,
   // incrementIfOdd,
@@ -11,7 +11,7 @@ const Tweet = ({
   // counter,
 }) => (
   <div className="entry">
-    <p>Tweet</p>
+    <p>Tweet {tid}</p>
     {/* <TweetTagList */}
     {/*   tags={tags} */}
     {/* /> */}
@@ -19,7 +19,7 @@ const Tweet = ({
   </div>
 );
 Tweet.propTypes = {
-  // id: PropTypes.number.isRequired,
+  tid: PropTypes.number.isRequired,
   // tags: PropTypes.array.isRequired,
   // value: PropTypes.number.isRequired,
 };

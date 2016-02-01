@@ -1,22 +1,22 @@
-import {
-  ADD_ENTRY,
-  REQUEST_ENTRIES,
-  RECEIVE_ENTRIES,
-} from '../constants/ActionTypes';
-
-export default function entries(state = [], action) {
+// import {
+//   ADD_ENTRY,
+//   REQUEST_ENTRIES,
+//   RECEIVE_ENTRIES,
+// } from '../constants/ActionTypes';
+//
+export default function entries(state = [{ tid: 1 }, {tid: 2}], action) {
   switch (action.type) {
-    case ADD_ENTRY:
-      return [
-        ...state,
-        {
-          id: action.id,
-          tags: action.tags,
-          value: action.value,
-        },
-      ];
-    case RECEIVE_ENTRIES:
-      return action.json.entries;
+    // case ADD_ENTRY:
+    //   return [
+    //     ...state,
+    //     {
+    //       id: action.id,
+    //       tags: action.tags,
+    //       value: action.value,
+    //     },
+    //   ];
+    // case RECEIVE_ENTRIES:
+    //   return action.json.entries;
     default:
       return state;
   }

@@ -1,31 +1,32 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import TweetsList from '../components/TweetsList';
-import { getVisibleTweets } from '../actions';
+import TweetList from '../components/TweetList';
+// import { getVisibleTweets } from '../actions';
 
-class VisibleEntriesList extends Component {
+class VisibleTweetsList extends Component {
   render() {
-    const { entries } = this.props;
+    const { tweets } = this.props;
     return (
       <div>
-        <h1>Entries</h1>
-        <EntriesList
-          entries={entries}
+        <h1>VisibleTweetsList</h1>
+        <TweetList
+          tweets={tweets}
         />
       </div>
     );
   }
 }
-VisibleEntriesList.propTypes = {
-  entries: PropTypes.array.isRequired,
+VisibleTweetsList.propTypes = {
+  tweets: PropTypes.array.isRequired,
 };
-// VisibleEntriesList.defaultProps = {
+// VisibleTweetsList.defaultProps = {
 //   entries: {}
 // };
 
 const select = (state) => ({
-  entries: getVisibleEntries(state.entries, state.filters),
+  // entries: getVisibleEntries(state.entries, state.filters),
+  tweets: state.tweets,
 });
 
-export default connect(select)(VisibleEntriesList);
+export default connect(select)(VisibleTweetsList);
