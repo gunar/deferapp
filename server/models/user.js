@@ -12,8 +12,7 @@ const UserSchema = new Schema({
     error: Number
   },
   twitter: {},
-  tokens: {},
-  tweets: []
+  tokens: {}
 });
 
 UserSchema.index({ username: 1, uid: 1 });

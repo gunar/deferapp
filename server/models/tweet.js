@@ -3,10 +3,6 @@ var mongoose = require('mongoose'),
 
 var TweetSchema = new Schema({
   tid: Number,
-  uids: {
-    starred: [Number],
-    archived: [Number]
-  },
   tweet: {},
   parsed: {}
 });
