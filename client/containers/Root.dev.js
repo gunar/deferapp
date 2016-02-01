@@ -1,7 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import DevTools from './DevTools';
 import App from './App';
+import DevTools from './DevTools';
 
 // TODO: Update Root.prod.js
 export default ({

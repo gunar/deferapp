@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
-import CoinsApp from './CoinsApp';
+import App from './App';
 
-export default class Root extends Component {
-  render() {
-    const { store } = this.props;
-    return (
-      <Provider store={store}>
-        <CoinsApp />
-      </Provider>
-    );
-  }
-}
+export default ({
+  store,
+}) => (
+  <Provider store={store}>
+    <App />
+  </Provider>
+);
