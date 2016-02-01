@@ -1,22 +1,31 @@
-import React from 'react';
-import { Link } from 'react-router';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { routeActions } from 'react-router-redux';
 
-function App({ children }) {
-  return (
-    <div>
-      <header>
-        <h1><Link to="/">Coins</Link></h1>
-        Links:
-        {' '}
-        <Link to="/group/5">Group 5</Link>
-        {/* {' '} */}
-        {/* <Link to="/bar">Bar</Link> */}
-      </header>
-      <div style={{ marginTop: '1.5em' }}>{children}</div>
-    </div>
-  );
+// import VisibleTweetsList from 'VisibleTweetsList';
+
+class App extends Component {
+  componentDidMount() {
+    const { dispatch } = this.props;
+    // dispatch(fetchEntries());
+  }
+
+  render() {
+    return (
+      <div>
+        <header>
+          <h1>FavBin</h1>
+        </header>
+        <div
+          style={{ marginTop: '1.5em' }}
+        >
+          {/* <VisibleTweetsList /> */}
+        </div>
+      </div>
+    );
+  }
 }
+App.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+};
 
-export default App;
+export default connect()(App);

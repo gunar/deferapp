@@ -58,18 +58,6 @@ export const getEntriesFromGroup = (entries, group) => {
     );
 };
 
-export const getVisibleEntries = (entries, filters) => {
-  if (filters.length === 0) return entries;
-
-  return entries.filter(entry =>
-      filters.reduce((prev, filter) => {
-        if (prev === false) return false;
-        return !!~entry.tags.indexOf(filter);
-      }
-      , true)
-    );
-};
-
 // TODO: Move this somewhere else
 function guid() {
   function s4() {
