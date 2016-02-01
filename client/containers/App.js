@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { fetchTweets } from '../actions';
 import VisibleTweetsList from './VisibleTweetsList';
 
+import { Paper, AppBar } from 'material-ui/lib';
+
 class App extends Component {
   componentDidMount() {
     const { dispatch } = this.props;
@@ -12,16 +14,14 @@ class App extends Component {
 
   render() {
     return (
-      <div>
-        <header>
-          <h1>FavBin</h1>
-        </header>
+      <Paper zDepth={1}>
+      <AppBar title="FavBin"/>
         <div
           style={{ marginTop: '1.5em' }}
         >
           <VisibleTweetsList />
         </div>
-      </div>
+      </Paper>
     );
   }
 }
