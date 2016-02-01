@@ -3,15 +3,24 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 
 const User = mongoose.model('User');
+const TagList = mongoose.model('TagList');
 const api = express.Router();
 
 var ENV = process.env.NODE_ENV || 'development';
 var PAGE_LENGTH = 20;
-
 api.get('/tweet/:page', passport.authOnly,
   function (req, res, next) {
-    Tweet
-      .find({'uids.starred': {$all: [req.user.uid]}})
+    TagList
+      .aggregate({
+        $lookup: {
+          from: 'tweets',
+          localField: 'tid',
+          foreignField: 'tid',
+          as: 'tweet'
+        }
+      })
+      .unwind('tweet')
+      .match({ 'uid': req.user.uid })
       .sort('-tid')
       .skip(parseInt(req.params.page)*PAGE_LENGTH)
       .limit(PAGE_LENGTH)
@@ -24,6 +33,8 @@ api.get('/tweet/:page', passport.authOnly,
         }
       });
 });
+
+// TODO: Rewrite to use TagList ---------------------------
 
 api.get('/tweet/archive/:page', passport.authOnly,
   function (req, res, next) {

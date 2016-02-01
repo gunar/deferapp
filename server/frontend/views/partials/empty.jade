@@ -1,8 +1,0 @@
-div.emptyMsg
-  i.mdi.mdi-twitter
-  div(ng-if="title == 'Archive'")
-    h3 No tweets
-    p When you archive tweets, you'll see them here.
-    a.btn.btn-link(ng-href="#{{'inbox' | routeSegmentUrl}}") Go to Inbox
-  div(ng-if="title == 'Inbox'")
-    p When you favorite tweets, you'll see them here.

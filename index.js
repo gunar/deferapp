@@ -20,7 +20,7 @@ config.load_models();
 const app = express();
 const MongoStore = require('connect-mongo')(session);
 
-require('./server/backend/init.passport')(passport, config);
+require('./server/init.passport')(passport, config);
 app.use(require('compression')());
 app.use(session({
 	saveUninitialized: false, // don't create session until something stored
@@ -30,9 +30,9 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use('/api/', require('./server/backend/api/user'));
-app.use('/api/', require('./server/backend/api/tweet'));
-app.use(require('./server/backend/routes/user'));
+app.use('/api/', require('./server/api/user'));
+app.use('/api/', require('./server/api/tweet'));
+app.use(require('./server/routes/user'));
 app.use(express.static('./dist'));
 
 if (ENV === 'development') {
