@@ -1,15 +1,10 @@
 export default function tweets(state = [], action) {
   switch (action.type) {
-    case RECEIVE_TWEETS:
-      console.log(action);
+    case 'RECEIVE_TWEETS':
       return [
         ...state,
-        {
-          tid: 123,
-        },
+        ...action.tweets,
       ];
-    // case RECEIVE_ENTRIES:
-    //   return action.json.entries;
     default:
       return state;
   }

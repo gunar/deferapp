@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import tweets from './entries';
+import tweets from './tweets';
 // import balance from './balance';
 // import tags from './tags';
 // import filters from './filters';
