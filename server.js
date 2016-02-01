@@ -29,7 +29,7 @@ if (!PRODUCTION) {
   }));
 }
 
-require('./server/routes')(app);
+app.use(express.static('./dist'));
 
 app.listen(port, '0.0.0.0', function err(error) {
   if (error) {
