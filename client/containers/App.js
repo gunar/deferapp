@@ -1,12 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
+import { fetchTweets } from '../actions';
 import VisibleTweetsList from './VisibleTweetsList';
 
 class App extends Component {
   componentDidMount() {
     const { dispatch } = this.props;
-    // dispatch(fetchEntries());
+    dispatch(fetchTweets());
   }
 
   render() {
