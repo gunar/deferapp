@@ -1,22 +1,23 @@
 #!/usr/bin/env node
 
-const env = process.env.NODE_ENV || 'development';
 const webpack = require('webpack');
 const webpackConfig = require('./webpack.config');
-console.log('NODE_ENV=' + env);
+
+const ENV = process.env.NODE_ENV || 'development';
+const PORT = process.env.PORT || 3000;
+console.log('NODE_ENV=' + ENV);
 
 const express = require('express');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const session = require('express-session');
 
-const config = require('./config')[env];
+const config = require('./config')[ENV];
 mongoose.connect(config.db);
 config.load_models();
 // const logger = require('./logger')(config.log, service);
 
 const app = express();
-const port = process.env.PORT || 3000;
 const MongoStore = require('connect-mongo')(session);
 
 require('./server/backend/init.passport')(passport, config);
@@ -34,7 +35,7 @@ app.use('/api/', require('./server/backend/api/tweet'));
 app.use(require('./server/backend/routes/user'));
 app.use(express.static('./dist'));
 
-if (env === 'development') {
+if (ENV === 'development') {
   const webpackCompiler = webpack(webpackConfig);
   app.use(require('webpack-dev-middleware')(webpackCompiler, {
     noInfo: true,
@@ -48,10 +49,10 @@ if (env === 'development') {
   }));
 }
 
-app.listen(port, '0.0.0.0', function err(error) {
+app.listen(PORT, '0.0.0.0', function err(error) {
   if (error) {
     console.error('Unable to listen for connections', error);
     process.exit(1);
   }
-  console.info('==> Listening on port %s. Open up http://localhost:%s/ in your browser.', port, port);
+  console.info('==> Listening on port %s. Open up http://localhost:%s/ in your browser.', PORT, PORT);
 });

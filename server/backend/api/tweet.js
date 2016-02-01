@@ -1,12 +1,11 @@
-var express = require('express'),
-    passport = require('passport'),
-    mongoose = require('mongoose');
+const express = require('express');
+const passport = require('passport');
+const mongoose = require('mongoose');
 
-var Tweet = mongoose.model('Tweet'),
-    api = express.Router();
+const User = mongoose.model('User');
+const api = express.Router();
 
-var env = process.env.NODE_ENV || 'development';
-
+var ENV = process.env.NODE_ENV || 'development';
 var PAGE_LENGTH = 20;
 
 api.get('/tweet/:page', passport.authOnly,

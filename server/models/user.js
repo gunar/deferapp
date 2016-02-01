@@ -1,7 +1,7 @@
-var mongoose = require('mongoose'),
-    Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-var UserSchema = new Schema({
+const UserSchema = new Schema({
   uid: Number,
   name: String,
   email: String,
@@ -12,7 +12,8 @@ var UserSchema = new Schema({
     error: Number
   },
   twitter: {},
-  tokens: {}
+  tokens: {},
+  tweets: []
 });
 
 UserSchema.index({ username: 1, uid: 1 });
