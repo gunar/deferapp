@@ -7,7 +7,13 @@ const TagList = mongoose.model('TagList');
 const api = express.Router();
 
 var ENV = process.env.NODE_ENV || 'development';
-var PAGE_LENGTH = 20;
+var PAGE_LENGTH = 20
+
+const unwindTweet = t => {
+  return Object.assign(t.tweet.tweet,
+    { tid: t.tid, uid: t.uid, tags: t.tags });
+};
+
 api.get('/tweet/:page', passport.authOnly,
   function (req, res, next) {
     TagList
@@ -29,7 +35,7 @@ api.get('/tweet/:page', passport.authOnly,
         else {
           //TODO filter fields before sending to frontend
           // filter out tweets with no links
-          res.json({data: docs});
+          res.json({data: docs.map(unwindTweet)});
         }
       });
 });

@@ -23,12 +23,11 @@ const config = {
   //   'fallback': path.join(__dirname, 'node_modules')
   // },
   module: {
-    loaders: [{
-      test: /\.jsx?$/,
-      loaders: ['react-hot', 'babel'],
-      include: path.join(__dirname, 'client'),
-      exclude: /node_modules/,
-    }],
+    loaders: [
+      { test: /\.jsx?$/, loaders: ['react-hot', 'babel'],
+        include: path.join(__dirname, 'client'), exclude: /node_modules/},
+      { test: /\.less$/, loader: 'style-loader!css-loader!less-loader' },
+    ],
   },
 };
 
