@@ -2,7 +2,7 @@ var fs = require('fs');
 
 // Load all models
 var load_models = function () {
-  var path = './src/models';
+  var path = './server/models';
   fs.readdirSync(path).forEach(function (file) {
     require(path+'/'+file);
   });
