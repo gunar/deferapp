@@ -6,11 +6,14 @@ export const receiveTweets = (tweets) => ({
   receivedAt: Date.now(),
 });
 
-export const fetchTweets = (page) => {
+export const fetchTweets = (fromTid) => {
   return dispatch => {
-    dispatch({ type: 'REQUEST_TWEETS' });
+    dispatch({
+      type: 'REQUEST_TWEETS',
+      fromTid,
+    });
     return fetch(
-      '/api/tweet/' + (page ? page : 0),
+      '/api/tweet/' + (fromTid ? fromTid : 0),
       {
         credentials: 'same-origin',
       }
