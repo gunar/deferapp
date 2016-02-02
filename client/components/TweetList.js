@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import Tweet from '../components/Tweet';
 
 import List from 'material-ui/lib/lists/list';
+import CircularProgress from 'material-ui/lib/circular-progress';
 import Infinite from 'react-infinite';
 
 const TweetList = ({
@@ -18,7 +19,7 @@ const TweetList = ({
       isInfiniteLoading={isInfiniteLoading}
       preloadBatchSize={Infinite.containerHeightScaleFactor(2)}
       preloadAdditionalHeight={Infinite.containerHeightScaleFactor(2)}
-      loadingSpinnerDelegate={<div>Loading...</div>}
+      loadingSpinnerDelegate={<div style={{textAlign: "center"}}><CircularProgress/></div>}
     >
       {tweets.map(tweet => (
         <Tweet
