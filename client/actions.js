@@ -7,14 +7,16 @@ export const receiveTweets = (json) => ({
   visitor: (json.visitor || false),
 });
 
-export const fetchTweets = (fromTid) => {
+export const fetchTweets = (fromTid, filter = []) => {
   return dispatch => {
     dispatch({
       type: 'REQUEST_TWEETS',
       fromTid,
+      filter
     });
+    var url = (filter.length > 0) ? '/api/tweet/'+filter.join(',')+'/' : '/api/tweet/'
     return fetch(
-      '/api/tweet/' + (fromTid ? fromTid : 0),
+      url + (fromTid ? fromTid : 0),
       {
         credentials: 'same-origin',
       }

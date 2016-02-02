@@ -21,16 +21,24 @@ const VisibleTweetsList = ({
 );
 VisibleTweetsList.propTypes = {
   tweets: PropTypes.array.isRequired,
+  loadMore: PropTypes.func.isRequired,
+  isInfiniteLoading: PropTypes.bool.isRequired,
 };
+
+const applyFilter = (tweets, filter) => {
+  if (filter.length == 0) return tweets;
+  return tweets.filter(t => t.tags.indexOf(filter[0]) > -1);
+}
 
 const mapStateToProps = (state) => ({
   // entries: getVisibleEntries(state.entries, state.filters),
-  tweets: state.tweets,
+  tweets: applyFilter(state.tweets, state.filter),
+  filter: state.filter,
   isInfiniteLoading: state.loading,
 });
 
-const mapDispatchToProps = (dispatch, ownProps) => ({ 
-  fetchTweets: (fromTid) => dispatch(fetchTweets(fromTid)),
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  fetchTweets: (fromTid, filter) => dispatch(fetchTweets(fromTid, filter)),
 });
 
 const mergeProps = (stateProps, dispatchProps, ownProps) => {
@@ -41,7 +49,7 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
   return {
     ...ownProps,
     ...stateProps,
-    loadMore: () => dispatchProps.fetchTweets(fromTid),
+    loadMore: () => dispatchProps.fetchTweets(fromTid, stateProps.filter),
   };
 };
 

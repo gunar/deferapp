@@ -32,16 +32,20 @@ class App extends Component {
     // dispatch(fetchTweets());
   }
 
+  setFilter(filter) {
+    const { dispatch } = this.props;
+    dispatch({type: 'SET_FILTER', filter});
+  };
+
   render() {
     const { visitor } = this.props;
     return (
       <Paper zDepth={2}>
         <Toolbar>
           <ToolbarGroup firstChild={true} float="left">
-            <DropDownMenu value={1}>
-              <MenuItem value={1} primaryText="Unread" />
-              <MenuItem value={2} primaryText="Archived" />
-              <MenuItem value={3} primaryText="All Broadcasts" />
+            <DropDownMenu ref="filter_dropdown" value={this.props.activeFilter}>
+              <MenuItem value={""} primaryText="Unread" onClick={ () => this.setFilter("") }/>
+              <MenuItem value={"archived"} primaryText="Archived" onClick={ () => this.setFilter("archived") }/>
             </DropDownMenu>
           </ToolbarGroup>
           { visitor ?
@@ -54,7 +58,6 @@ class App extends Component {
             </ToolbarGroup>
           : '' }
         </Toolbar>
-        <p>{ visitor ? 'Visitor' : 'Logged in'}</p>
         <VisibleTweetsList />
       </Paper>
     );
@@ -62,11 +65,13 @@ class App extends Component {
 }
 App.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  activeFilter: PropTypes.string.isRequired,
   visitor: PropTypes.bool,
 };
 
-const mapStoreToProps = (store) => ({
-  visitor: !!store.visitor,
+const mapStateToProps = (state) => ({
+  visitor: !!state.visitor,
+  activeFilter: state.filter.indexOf('archived') > -1 ? 'archived' : '',
 });
 
-export default connect(mapStoreToProps)(App);
+export default connect(mapStateToProps)(App);
