@@ -1,5 +1,7 @@
 #!/bin/env node
 
+console.log(process.version);
+
 const ENV = process.env.NODE_ENV || 'development';
 const IP = process.env.OPENSHIFT_NODEJS_IP ||
            process.env.OPENSHIFT_INTERNAL_IP ||

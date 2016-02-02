@@ -11,6 +11,7 @@ var load_models = function () {
 module.exports = {
   development: {
     db: "mongodb://localhost/rs",
+    db_options: {},
     verbose: true,
     twitter: {
       consumerKey: "f9J4C23UwWA9MrVGbx2avyCQC",
