@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
-const PRODUCTION = process.env.NODE_ENV === 'production';
+
+const ENV = process.env.NODE_ENV || 'development';
 
 const config = {
   entry: ['./client/index'],
@@ -31,7 +32,7 @@ const config = {
   },
 };
 
-if (PRODUCTION) {
+if (ENV === 'production') {
   config.plugins.push(
     new webpack.DefinePlugin({
       'process.env': { NODE_ENV: JSON.stringify('production') },
