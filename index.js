@@ -1,10 +1,16 @@
-#!/usr/bin/env node
+#!/bin/env node
 
 const webpack = require('webpack');
 const webpackConfig = require('./webpack.config');
 
 const ENV = process.env.NODE_ENV || 'development';
-const PORT = process.env.PORT || 3000;
+const IP = process.env.OPENSHIFT_NODEJS_IP ||
+           process.env.OPENSHIFT_INTERNAL_IP ||
+           '0.0.0.0';
+const PORT = process.env.PORT ||
+             process.env.OPENSHIFT_NODEJS_PORT ||
+             process.env.OPENSHIFT_INTERNAL_PORT ||
+             3000;
 console.log('NODE_ENV=' + ENV);
 
 const express = require('express');
@@ -49,7 +55,7 @@ if (ENV === 'development') {
   }));
 }
 
-app.listen(PORT, '0.0.0.0', function err(error) {
+app.listen(PORT, IP, function err(error) {
   if (error) {
     console.error('Unable to listen for connections', error);
     process.exit(1);
