@@ -4,7 +4,7 @@
   "description": "Read you fav'ed tweets",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node --harmony server.js",
     "docker": "docker run -d -p 27017:27017 mongo",
     "watch": "nodemon -d 1 -w webpack.config.js -w ./server -w index.js index.js",
     "test": "./node_modules/.bin/tape -r babel-register ./src/**/*.js*",
@@ -74,5 +74,5 @@
     "webpack-hot-middleware": "^2.6.0"
   },
   "private": true,
-  "main": "index.js"
+  "main": "--harmony index.js"
 }
