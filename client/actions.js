@@ -1,9 +1,10 @@
 import fetch from 'isomorphic-fetch';
 
-export const receiveTweets = (tweets) => ({
+export const receiveTweets = (json) => ({
   type: 'RECEIVE_TWEETS',
-  tweets,
+  tweets: json.data,
   receivedAt: Date.now(),
+  visitor: (json.visitor || false),
 });
 
 export const fetchTweets = (fromTid) => {
@@ -19,6 +20,6 @@ export const fetchTweets = (fromTid) => {
       }
     )
     .then(req => req.json())
-    .then(json => dispatch(receiveTweets(json.data)));
+    .then(json => dispatch(receiveTweets(json)));
   };
 };

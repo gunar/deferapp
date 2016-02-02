@@ -21,15 +21,6 @@ module.exports = function(passport, config) {
       next();
   };
 
-  passport.ownUser = function(req, res, next) {
-    if (req.isAuthenticated())
-      res.redirect('/auth');
-    else if (req.params.uid != req.user.uid)
-      res.redirect('/auth');
-    else
-      next();
-  };
-
   passport.use('twitter', new TwitterStrategy({
       consumerKey: config.twitter.consumerKey,
       consumerSecret: config.twitter.consumerSecret,

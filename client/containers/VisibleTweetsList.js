@@ -6,10 +6,6 @@ import TweetList from '../components/TweetList';
 import { fetchTweets } from '../actions';
 // import { getVisibleTweets } from '../actions';
 
-// class VisibleTweetsList extends Component {
-//   render() {
-//     const { tweets } = this.props;
-//     return (
 const VisibleTweetsList = ({
   tweets,
   loadMore,
@@ -26,9 +22,6 @@ const VisibleTweetsList = ({
 VisibleTweetsList.propTypes = {
   tweets: PropTypes.array.isRequired,
 };
-// VisibleTweetsList.defaultProps = {
-//   entries: {}
-// };
 
 const mapStateToProps = (state) => ({
   // entries: getVisibleEntries(state.entries, state.filters),

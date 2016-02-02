@@ -1,7 +1,6 @@
 #!/bin/env node
 
 console.log(process.version);
-console.log(process.env.PATH);
 
 const ENV = process.env.NODE_ENV || 'development';
 const IP = process.env.OPENSHIFT_NODEJS_IP ||
@@ -42,6 +41,7 @@ app.use(require('./server/routes/user'));
 app.use(express.static('./dist'));
 
 if (ENV === 'development') {
+  console.log('Using webpack-dev-middleware');
   const webpack = require('webpack');
   const webpackConfig = require('./webpack.config');
 

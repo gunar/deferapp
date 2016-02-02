@@ -16,6 +16,7 @@ class App extends Component {
   }
 
   render() {
+    const { visitor } = this.props;
     return (
       <Paper zDepth={2}>
         <Toolbar>
@@ -27,6 +28,7 @@ class App extends Component {
             </DropDownMenu>
           </ToolbarGroup>
         </Toolbar>
+        <p>{ visitor ? 'Visitor' : 'Logged in'}</p>
         <VisibleTweetsList />
       </Paper>
     );
@@ -34,6 +36,11 @@ class App extends Component {
 }
 App.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  visitor: PropTypes.bool,
 };
 
-export default connect()(App);
+const mapStoreToProps = (store) => ({
+  visitor: !!store.visitor,
+});
+
+export default connect(mapStoreToProps)(App);
