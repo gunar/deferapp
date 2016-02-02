@@ -15,12 +15,8 @@ class App extends Component {
   render() {
     return (
       <Paper zDepth={1}>
-      <AppBar title="FavBin"/>
-        <div
-          style={{ marginTop: '1.5em' }}
-        >
-          <VisibleTweetsList />
-        </div>
+        <AppBar title="FavBin"/>
+        <VisibleTweetsList />
       </Paper>
     );
   }

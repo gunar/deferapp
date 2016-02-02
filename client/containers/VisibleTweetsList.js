@@ -9,7 +9,6 @@ class VisibleTweetsList extends Component {
     const { tweets } = this.props;
     return (
       <div>
-        <h1>VisibleTweetsList</h1>
         <TweetList
           tweets={tweets}
         />
