@@ -4,13 +4,11 @@
 #
 
 
-#  Returns the configured Node version
+#  Returns the configured Node version - defaults to 0.8.24.
 function get_node_version() {
-   # read the app's package.json file
+   
+      # read the app's package.json file
    package_json="${OPENSHIFT_REPO_DIR}/package.json"
-   if [ ! -f "$package_json" ] ; then
-     package_json="$(get_node_tmp_dir)/package.json"
-   fi
 
    # attempt to detect the desired node.js version
    engine=$(grep "\"node\"" "$package_json" | tail -n 1 | sed -e 's/^.*" *[~=<>]*[=<>]* *v*\([0-9][^" ]*\) *[^"]*".*$/\1/p;d')
@@ -39,7 +37,7 @@ function get_node_install_dir() {
 #  Returns the path to the npm binary.
 function get_npm_bin_path() {
    ver=${1:-"$(get_node_version)"}
-   echo "$(get_node_install_dir)node-v$ver-linux-x64/bin"
+   echo "$(get_node_install_dir)/node-v$ver-linux-x64/bin"
 
 }  #  End of function  get_npm_bin_path.
 
@@ -70,8 +68,8 @@ function _install_nodejs() {
    ver=${1:-"$(get_node_version)"}
 
    # Sample download links:
-   #    http://nodejs.org/dist/v0.8.9/node-v0.8.9-linux-x64.tar.gz
-   #    http://nodejs.org/dist/v0.9.1/node-v0.9.1-linux-x64.tar.gz
+   #    http://nodejs.org/dist/v0.8.24/node-v0.8.24-linux-x64.tar.gz
+   #    http://nodejs.org/dist/v0.10.10/node-v0.10.10-linux-x64.tar.gz
    zfile="node-v${ver}-linux-x64.tar.gz"
    zlink="http://nodejs.org/dist/v${ver}/${zfile}"
 
@@ -94,6 +92,26 @@ function _install_nodejs() {
 
 }  #  End of function  _install_nodejs.
 
+
+#  Ensure npm and node symlinks exist in ~/.node_modules/.bin/ directory.
+function _ensure_symlinks_in_node_modules_bin_dir() {
+   zdir="$HOME/.node_modules/.bin/"
+   if [ -d "$zdir" ]; then
+      ln -sf "$(get_npm_bin_path)/npm"   "$zdir"
+      ln -sf "$(get_node_bin_path)/node" "$zdir"
+   fi
+
+}  #  End of function  _ensure_symlinks_in_node_modules_bin_dir.
+
+
+#  Ensure context - this is a bit too hacky.
+function _ensure_context_exists() {
+   zenv="$OPENSHIFT_HOMEDIR/nodejs/configuration/node.env"
+   if ! egrep '^\s*function\s+nodejs_context' "$zenv" > /dev/null 2>&1; then
+      echo -e "function nodejs_context() { bash -c \"\$@\"; }\n" >> "$zenv" || :
+   fi
+
+}  #  End of function  _ensure_context_exists.
 
 
 #  Ensure the shell env setup bits are added to user's .bash_profile.
@@ -134,6 +152,12 @@ function ensure_node_is_installed() {
    else
       _install_nodejs "$ver"
    fi
+
+   #  Ensure node and npm symlinks exist in ~/.node_modules/.bin directory.
+   _ensure_symlinks_in_node_modules_bin_dir
+
+   #  Ensure context exists.
+   _ensure_context_exists
 
    #  Ensure .bash_profile sets up path for custom Node[.js] version.
    _ensure_bash_profile_setup
