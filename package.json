@@ -1,6 +1,6 @@
 {
   "name": "favbin",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Read you fav'ed tweets",
   "main": "server.js",
   "scripts": {
@@ -21,8 +21,8 @@
   },
   "homepage": "https://gitlab.com/gunar/favbin.git",
   "engines": {
-    "node": ">= 5.5.0",
-    "npm": ">= 3.5.3"
+    "node": "5.5.0",
+    "npm": "3.5.3"
   },
   "compression": "^1.6.1",
   "dependencies": {
