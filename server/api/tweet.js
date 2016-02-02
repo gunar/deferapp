@@ -92,7 +92,6 @@ api.get('/tweet/:page', passport.authOnly,
     getTweetsByTags(req.user.uid, [], req.params.page)
       .then(docs => {
         // TODO: filter out tweets with no links
-        console.log(docs);
         res.json({data: docs.map(unwindTweet)});
       }, err => {
         res.status(500).json({message: err});
