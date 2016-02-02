@@ -62,12 +62,17 @@ const unwindTweet = t => {
   };
 };
 
-const getTweetsByTags = (uid, tags, page) => {
+const getTweetsByTags = (uid, tags, from_tid) => {
+  from_tid = from_tid || 0;
+
   const match = { 'uid': uid };
   if (typeof tags === 'object' && tags.length) {
     match['tags'] = { $all: tags };
   } else {
     match['tags'] = { $nin: ['archived'] };
+  }
+  if (from_tid > 0) {
+    match['tid'] = { $lt: Number(from_tid) };
   }
 
   return TagList
@@ -82,17 +87,15 @@ const getTweetsByTags = (uid, tags, page) => {
           .unwind('tweet')
           .match(match)
           .sort('-tid')
-          .skip(parseInt(page, 10) * PAGE_LENGTH)
           .limit(PAGE_LENGTH)
           .exec();
 };
 
-api.get('/tweet/:page', passport.authOnly,
+api.get('/tweet/:from_tid', passport.authOnly,
   function (req, res, next) {
-    getTweetsByTags(req.user.uid, [], req.params.page)
+    getTweetsByTags(req.user.uid, [], req.params.from_tid)
       .then(docs => {
         // TODO: filter out tweets with no links
-        console.log(docs);
         res.json({data: docs.map(unwindTweet)});
       }, err => {
         res.status(500).json({message: err});
