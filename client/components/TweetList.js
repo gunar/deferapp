@@ -1,18 +1,19 @@
 import React, { PropTypes } from 'react';
 import Tweet from '../components/Tweet';
 
+import List from 'material-ui/lib/lists/list';
 
 const TweetList = ({
   tweets,
 }) => (
-  <div>
+  <List className="tweet_list">
     {tweets.map(tweet => (
       <Tweet
         key={tweet.tid}
         {...tweet}
       />
     ))}
-  </div>
+  </List>
 );
 TweetList.propTypes = {
   tweets: PropTypes.array.isRequired,
