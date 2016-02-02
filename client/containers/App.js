@@ -52,11 +52,11 @@ class App extends Component {
             <ToolbarGroup lastChild float="right">
               <RaisedButton
                 label="Login" primary={true}
-                href="/auth"
+                linkButton={true} href="/auth"
                 icon={<TwitterIcon color="white" />}
               />
             </ToolbarGroup>
-          : '' }
+          : null }
         </Toolbar>
         <VisibleTweetsList />
       </Paper>
