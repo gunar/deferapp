@@ -91,8 +91,13 @@ const getTweetsByTags = (uid, tags, from_tid) => {
           .exec();
 };
 
-const visitorTweets = (tag) => {
-  var data = {};
+const visitorTweets = (tag, fromTid) => {
+  var data = [];
+
+  if (fromTid && fromTid > 0) {
+    // Return empty if asks for 2nd page in visitor mode
+    return { data, visitor: true };
+  }
   if (tag === 'inbox') {
     data = [
       {
@@ -121,7 +126,7 @@ api.get('/tweet/:from_tid',
   function (req, res, next) {
     if (!req.user) {
       // Default tweets for not logged user
-      res.json(visitorTweets('inbox'));
+      res.json(visitorTweets('inbox', req.params.from_tid));
       return;
     }
     getTweetsByTags(req.user.uid, [], req.params.from_tid)
