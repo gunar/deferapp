@@ -102,10 +102,10 @@ api.get('/tweet/:from_tid', passport.authOnly,
       });
 });
 
-api.get('/tweet/:tags/:page', passport.authOnly,
+api.get('/tweet/:tags/:from_tid', passport.authOnly,
   function (req, res, next) {
     const tags = req.params.tags.split(',');
-    getTweetsByTags(req.user.uid, tags, req.params.page)
+    getTweetsByTags(req.user.uid, tags, req.params.from_tid)
       .then(docs => {
         res.json({data: docs.map(unwindTweet)});
       }, err => {

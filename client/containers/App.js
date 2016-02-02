@@ -15,15 +15,19 @@ class App extends Component {
     // dispatch(fetchTweets());
   }
 
+  setFilter(filter) {
+    const { dispatch } = this.props;
+    dispatch({type: 'SET_FILTER', filter});
+  };
+
   render() {
     return (
       <Paper zDepth={2}>
         <Toolbar>
           <ToolbarGroup firstChild={true} float="left">
-            <DropDownMenu value={1}>
-              <MenuItem value={1} primaryText="Unread" />
-              <MenuItem value={2} primaryText="Archived" />
-              <MenuItem value={3} primaryText="All Broadcasts" />
+            <DropDownMenu ref="filter_dropdown" value={this.props.activeFilter}>
+              <MenuItem value={""} primaryText="Unread" onClick={ () => this.setFilter("") }/>
+              <MenuItem value={"archived"} primaryText="Archived" onClick={ () => this.setFilter("archived") }/>
             </DropDownMenu>
           </ToolbarGroup>
         </Toolbar>
@@ -34,6 +38,11 @@ class App extends Component {
 }
 App.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  activeFilter: PropTypes.string.isRequired
 };
 
-export default connect()(App);
+const mapStateToProps = (state) => ({
+  activeFilter: state.filter.indexOf('archived') > -1 ? 'archived' : '',
+});
+
+export default connect(mapStateToProps)(App);
