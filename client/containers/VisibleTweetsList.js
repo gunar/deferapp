@@ -37,7 +37,19 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({ 
-  loadMore: () => dispatch(fetchTweets(1)),
+  fetchTweets: (fromTid) => dispatch(fetchTweets(fromTid)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(VisibleTweetsList);
+const mergeProps = (stateProps, dispatchProps, ownProps) => {
+  let fromTid = 0;
+  if (stateProps.tweets.length) {
+    fromTid = stateProps.tweets.slice(-1)[0].tid;
+  }
+  return {
+    ...ownProps,
+    ...stateProps,
+    loadMore: () => dispatchProps.fetchTweets(fromTid),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(VisibleTweetsList);

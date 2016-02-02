@@ -12,7 +12,7 @@ import { Paper, AppBar, Toolbar, ToolbarGroup, MenuItem, DropDownMenu } from 'ma
 class App extends Component {
   componentDidMount() {
     const { dispatch } = this.props;
-    dispatch(fetchTweets());
+    // dispatch(fetchTweets());
   }
 
   render() {

@@ -11,11 +11,14 @@ const TweetList = ({
 }) => (
   <List className="tweet_list">
     <Infinite
-      elementHeight={72}
+      elementHeight={88}
       useWindowAsScrollContainer
       infiniteLoadBeginEdgeOffset={100}
       onInfiniteLoad={loadMore}
       isInfiniteLoading={isInfiniteLoading}
+      preloadBatchSize={Infinite.containerHeightScaleFactor(2)}
+      preloadAdditionalHeight={Infinite.containerHeightScaleFactor(2)}
+      loadingSpinnerDelegate={<div>Loading...</div>}
     >
       {tweets.map(tweet => (
         <Tweet
