@@ -9,7 +9,7 @@ const api = express.Router();
 var ENV = process.env.NODE_ENV || 'development';
 var PAGE_LENGTH = 20
 
-const filterObject = (obj, keys) => 
+const filterObject = (obj, keys) =>
   Object.keys(obj)
     .filter(k => keys.indexOf(k) > -1)
     .reduce((acc, key) => {
@@ -20,6 +20,7 @@ const filterObject = (obj, keys) =>
 
 
 const unwindTweet = t => {
+  'use strict';
   const fullTweet = t.tweet.tweet;
   const tweet = filterObject(fullTweet, [
     'favorite_count',
@@ -33,9 +34,14 @@ const unwindTweet = t => {
     'name',
   ]);
 
-  var url = '';
+  let url = [];
   if (fullTweet.entities && fullTweet.entities.urls && fullTweet.entities.urls.length) {
-    url = fullTweet.entities.urls[0].expanded_url;
+    url = fullTweet.entities.urls.map(u => u.expanded_url);
+  }
+
+  let media = [];
+  if (fullTweet.entities && fullTweet.entities.media && fullTweet.entities.media.length) {
+    media = fullTweet.entities.media.map(m => m.media_url_https);
   }
 
   return {
@@ -44,6 +50,7 @@ const unwindTweet = t => {
     tweet,
     user,
     url,
+    media
   };
 };
 
