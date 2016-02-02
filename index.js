@@ -16,7 +16,7 @@ const passport = require('passport');
 const session = require('express-session');
 
 const config = require('./config')[ENV];
-mongoose.connect(config.db);
+mongoose.connect(config.db, config.db_options || {});
 config.load_models();
 // const logger = require('./logger')(config.log, service);
 

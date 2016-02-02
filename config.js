@@ -21,7 +21,8 @@ module.exports = {
     load_models: load_models
   },
   production: { //TODO: Update for production
-    db: "mongodb://localhost/rs",
+    db: process.env.MONGODB_URL + 'rs',
+    db_options: { db: { nativeParser: true } },
     verbose: true,
     twitter: {
       consumerKey: "f9J4C23UwWA9MrVGbx2avyCQC",
