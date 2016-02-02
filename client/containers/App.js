@@ -4,7 +4,10 @@ import { connect } from 'react-redux';
 import { fetchTweets } from '../actions';
 import VisibleTweetsList from './VisibleTweetsList';
 
-import { Paper, AppBar } from 'material-ui/lib';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+injectTapEventPlugin();
+
+import { Paper, AppBar, Toolbar, ToolbarGroup, MenuItem, DropDownMenu } from 'material-ui/lib';
 
 class App extends Component {
   componentDidMount() {
@@ -14,8 +17,16 @@ class App extends Component {
 
   render() {
     return (
-      <Paper zDepth={1}>
-        <AppBar title="FavBin"/>
+      <Paper zDepth={2}>
+        <Toolbar>
+          <ToolbarGroup firstChild={true} float="left">
+            <DropDownMenu value={1}>
+              <MenuItem value={1} primaryText="Unread" />
+              <MenuItem value={2} primaryText="Archived" />
+              <MenuItem value={3} primaryText="All Broadcasts" />
+            </DropDownMenu>
+          </ToolbarGroup>
+        </Toolbar>
         <VisibleTweetsList />
       </Paper>
     );
