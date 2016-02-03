@@ -26,9 +26,9 @@ module.exports = {
     db_options: { db: { nativeParser: true } },
     verbose: true,
     twitter: {
-      consumerKey: "f9J4C23UwWA9MrVGbx2avyCQC",
-      consumerSecret: "ITwNvslkGgIHHZX9gNURKU8kYI8ehpENW4RWMbDaqqa9ipySPg",
-      callbackURL: "http://127.0.0.1:3000/auth/callback"
+      consumerKey: "AbKh5EG9HL4gMTIbxGcj6tO3R",
+      consumerSecret: "coSjuX1B2XR6LdR860KdlLP3yGZdEquJUkMVQ06q7IX0355R4O",
+      callbackURL: "https://favbin-gunar.rhcloud.com/auth/callback"
     },
     logs: './logs/',
     load_models: load_models
