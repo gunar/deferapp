@@ -28,7 +28,7 @@ module.exports = {
     twitter: {
       consumerKey: "AbKh5EG9HL4gMTIbxGcj6tO3R",
       consumerSecret: "coSjuX1B2XR6LdR860KdlLP3yGZdEquJUkMVQ06q7IX0355R4O",
-      callbackURL: "https://favbin-gunar.rhcloud.com/auth/callback"
+      callbackURL: "http://www.deferapp.com/auth/callback"
     },
     logs: './logs/',
     load_models: load_models
