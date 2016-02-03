@@ -11,7 +11,7 @@ module.exports = function crawler(mongoose) {
       logger = require('./logger')(config.log, service, 'debug');
 
   // Configurations
-  var MINIMUM_INTERVAL_MINS = 10/60;
+  var MINIMUM_INTERVAL_MINS = 1;
 
   // Constants
   var MINIMUM_INTERVAL = MINIMUM_INTERVAL_MINS*60*1000;
