@@ -3,20 +3,21 @@ import { connect } from 'react-redux';
 
 import TweetList from '../components/TweetList';
 
-import { fetchTweets } from '../actions';
+import { fetchTweets, toggleTweet } from '../actions';
 // import { getVisibleTweets } from '../actions';
 
 const VisibleTweetsList = ({
   tweets,
   loadMore,
   isInfiniteLoading,
+  dispatch,
 }) => (
   <div>
     <TweetList
       tweets={
         tweets.map(t => ({
           ...t,
-          // action: () => dispatch(),
+          action: () => dispatch(toggleTweet(t.tid, t.tags)),
         }))
       }
       loadMore={loadMore}
@@ -53,6 +54,7 @@ const mergeProps = (stateProps, { dispatch }, ownProps) => {
     ...ownProps,
     ...stateProps,
     loadMore: () => dispatch(fetchTweets(fromTid, stateProps.filter)),
+    dispatch,
   };
 };
 

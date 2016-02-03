@@ -14,9 +14,11 @@ const Tweet = ({
   url,
   user,
   tweet,
+  tags,
 }) => {
   const hasMedia = media.length > 0;
   const hasURL = url.length > 0;
+  const isArchived = tags.indexOf('archived') > -1;
   return (
     <Card className="twitter">
         <CardHeader className="header"
@@ -40,7 +42,7 @@ const Tweet = ({
               style={{ margin: 0 }}
               onClick={ action }
             >
-              done
+              { isArchived ? 'move_to_inbox' : 'done' }
             </IconButton>
           </div>
         </CardHeader>
@@ -49,6 +51,7 @@ const Tweet = ({
           <img src={media[0]} />
         </CardMedia>
       : <CardText>{tweet.text}</CardText> }
+      <CardText>{tags.join(', ')}</CardText>
     </Card>
   );
 };
