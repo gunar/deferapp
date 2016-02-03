@@ -63,7 +63,16 @@ const TweetCard = (t) => {
           subtitle={<span className="date">{new Date(t.tweet.created_at).toLocaleString()}</span>}
           avatar={t.user.profile_image_url_https}>
           <div style={{float: "right"}}>
-            <IconButton iconClassName="material-icons" style={{margin: 0}}>launch</IconButton>
+            <IconButton
+              iconClassName="material-icons"
+              style={{margin: 0}}
+              linkButton
+              disabled={!t.url.length}
+              href={t.url[0]}
+              target="_blank"
+            >
+              launch
+            </IconButton>
             <IconButton iconClassName="material-icons" style={{margin: 0}}>done</IconButton>
           </div>
         </CardHeader>
