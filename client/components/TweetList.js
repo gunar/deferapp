@@ -5,12 +5,13 @@ import List from 'material-ui/lib/lists/list';
 import CircularProgress from 'material-ui/lib/circular-progress';
 import Infinite from 'react-infinite';
 
+const spinner = (<div style={{ textAlign: 'center' }}><CircularProgress/></div>);
 const TweetList = ({
   tweets,
   loadMore,
   isInfiniteLoading,
 }) => (
-  <List className="" style={{ 'paddingTop': 0, 'paddingBottom': 0 }}>
+  <List className="" style={{ paddingTop: 0, paddingBottom: 0 }}>
     <Infinite
       elementHeight={88}
       useWindowAsScrollContainer
@@ -19,7 +20,7 @@ const TweetList = ({
       isInfiniteLoading={isInfiniteLoading}
       preloadBatchSize={Infinite.containerHeightScaleFactor(2)}
       preloadAdditionalHeight={Infinite.containerHeightScaleFactor(2)}
-      loadingSpinnerDelegate={<div style={{textAlign: "center"}}><CircularProgress/></div>}
+      loadingSpinnerDelegate={spinner}
     >
       {tweets.map(tweet => (
         <Tweet

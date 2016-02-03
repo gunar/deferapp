@@ -2,9 +2,12 @@
 
 ## TODO
 
-- Decide on name
-- Make twitter login work with openshift
 - Make crawler work on openshift
+- Write "tweets" for Visitor Mode
+- Make empty states (when there's no data to be shown)
+ - Empty inbox
+ - Empty Archived
+- Fix scroll (make smooth)
 
 ## npm scripts
 
