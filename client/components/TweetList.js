@@ -10,7 +10,7 @@ const TweetList = ({
   loadMore,
   isInfiniteLoading,
 }) => (
-  <List className="" style={{ 'paddingTop': 0, 'paddingBottom': 0 }}>
+  <List className="card_list" style={{ 'paddingTop': 0, 'paddingBottom': 0 }}>
     <Infinite
       elementHeight={88}
       useWindowAsScrollContainer

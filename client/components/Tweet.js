@@ -53,11 +53,15 @@ import CardTitle from 'material-ui/lib/card/card-title';
 import FlatButton from 'material-ui/lib/flat-button';
 import CardText from 'material-ui/lib/card/card-text';
 
+const cardStyle = {
+  margin: "20px 10px",
+  boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
+}
 const TweetCard = (t) => {
   const hasMedia = t.media.length > 0;
   const hasURL = t.url.length > 0;
   return (
-    <Card className="twitter">
+    <Card style={cardStyle}>
         <CardHeader className="header"
           title={"@"+t.user.screen_name}
           subtitle={<span className="date">{new Date(t.tweet.created_at).toLocaleString()}</span>}
