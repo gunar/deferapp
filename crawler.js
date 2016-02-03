@@ -8,7 +8,7 @@ module.exports = function crawler(mongoose) {
   var env = process.env.NODE_ENV || 'development',
       service = 'crawler',
       config = require('./config')[env],
-      logger = require('./logger')(config.log, service, 'warn');
+      logger = require('./logger')(config.log, service, 'debug');
 
   // Configurations
   var MINIMUM_INTERVAL_MINS = 10/60;
@@ -163,13 +163,13 @@ module.exports = function crawler(mongoose) {
           tweet: tweet.content,
           parsed: {}
         });
-        logger.debug('New tweet\t', + tid);
+        logger.silly('New tweet\t', + tid);
 
       } else {
         // Tweet already stored
         newTweet = stored;
         newTweet.tweet = tweet.content;
-        logger.debug('Updating tweet ' + tid);
+        logger.silly('Updating tweet ' + tid);
       }
       return _(newTweet.save().then(function () { return { uid: uid, tid: tid  }; }));
     });
@@ -196,14 +196,14 @@ module.exports = function crawler(mongoose) {
             .save()
             .then(
               function (tagList) {
-                logger.debug('New tagList');
+                logger.silly('New tagList');
                 return { uid: tagList.uid, tid: tagList.tid };
               }
             )
         );
       }
 
-      logger.debug('TagList already exists');
+      logger.silly('TagList already exists');
       return _([{ uid: tweet.uid, tid: tweet.tid }]);
     });
   };
