@@ -1,30 +1,13 @@
-# Redux DevTools Counter example
+# FavBin
 
-## Running Example
+## TODO
 
-First, clone the project:
+- Decide on name
+- Make twitter login work with openshift
+- Make crawler work on openshift
 
-```
-git clone https://github.com/gaearon/redux-devtools.git
-```
+## npm scripts
 
-Then install the dependencies in the root folder:
-
-```
-cd redux-devtools
-npm install
-```
-
-Install the dependencies in the example folder:
-
-```
-cd examples/counter
-npm install
-```
-
-Finally, run the project:
-
-```
-npm start
-open http://localhost:3000
-```
+- `start`: Run server
+- `watch`: Run server and watch for changes
+- `build`: Build bundle.js
