@@ -1,15 +1,11 @@
 import Colors from 'material-ui/lib/styles/colors';
 import ColorManipulator from 'material-ui/lib/utils/color-manipulator';
-import Spacing from 'material-ui/lib/styles/spacing';
-import zIndex from 'material-ui/lib/styles/zIndex';
 
 export default {
-  spacing: Spacing,
-  zIndex: zIndex,
-  fontFamily: 'Roboto, sans-serif',
+  fontFamily: 'Raleway, sans-serif',
   palette: {
     primary1Color: Colors.pink500,
-    primary2Color: Colors.cyan700,
+    primary2Color: Colors.pink500,
     primary3Color: Colors.lightBlack,
     accent1Color: Colors.pinkA200,
     accent2Color: Colors.grey100,

@@ -23,6 +23,7 @@ const Tweet = ({
 }) => {
   const hasMedia = media.length > 0;
   const hasURL = url.length > 0;
+  const hasTags = tags.length > 0;
   const isArchived = tags.indexOf('archived') > -1;
   return (
     <Card style={cardStyle}>
@@ -55,7 +56,8 @@ const Tweet = ({
         <CardMedia overlay={<CardTitle subtitle={tweet.text} />}>
           <img src={media[0]} />
         </CardMedia>
-      : <CardText>{tweet.text}</CardText> }
+        : <CardText>{tweet.text}</CardText> }
+      { hasTags ? <CardText>{tags.join(', ')}</CardText> : null }
     </Card>
   );
 };
