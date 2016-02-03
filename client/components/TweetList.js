@@ -10,7 +10,7 @@ const TweetList = ({
   loadMore,
   isInfiniteLoading,
 }) => (
-  <List className="tweet_list">
+  <List className="" style={{ 'paddingTop': 0, 'paddingBottom': 0 }}>
     <Infinite
       elementHeight={88}
       useWindowAsScrollContainer
@@ -27,7 +27,7 @@ const TweetList = ({
           {...tweet}
         />
       ))}
-  </Infinite>
+    </Infinite>
   </List>
 );
 TweetList.propTypes = {
