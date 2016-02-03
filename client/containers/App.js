@@ -19,6 +19,9 @@ import {
   Toggle,
 } from 'material-ui/lib';
 import Colors from 'material-ui/lib/styles/colors';
+import appTheme from '../style/theme';
+import ThemeManager from 'material-ui/lib/styles/theme-manager';
+import ThemeDecorator from 'material-ui/lib/styles/theme-decorator';
 
 const TwitterIcon = (props) => (
   <SvgIcon {...props}>
@@ -26,51 +29,67 @@ const TwitterIcon = (props) => (
   </SvgIcon>
 );
 
+const barStyle = (showArchived) => ({
+  boxShadow: '0 10px 20px rgba(0,0,0,0.1)',
+  backgroundColor: 'white',
+});
+
 const App = ({
   visitor,
   showArchived,
-  dispatch
+  dispatch,
+  muiTheme,
 }) => {
   const toggleFilter = () => dispatch({ type: 'TOGGLE_FILTER' });
   return (
-    <Paper zDepth={2}>
-      <Toolbar style={{backgroundColor: (showArchived ? Colors.grey300 : Colors.cyan500)}}>
-        <ToolbarGroup float='left'>
-          <ToolbarTitle text={showArchived ? 'Archive' : 'Inbox'}/>
-        </ToolbarGroup>
-        <ToolbarGroup
-          float="right"
-          style={{'marginTop': 16}}
-        >
-          <Toggle
-            labelPosition='right'
-            onToggle={toggleFilter}
-            toggled={showArchived}
+    <Paper zDepth={0} style={{overflowX: 'hidden'}}>
+      <AppBar
+        style={barStyle(showArchived)}
+        title={<div style={{color: '#000', textAlign: 'center', marginLeft: '-56px'}}>{showArchived ? 'Archive' : 'Inbox'}</div>}
+        iconElementLeft={<Toggle
+          style={{paddingTop: '14px', paddingLeft: '10px'}}
+          labelPosition='right'
+          onToggle={toggleFilter}
+          toggled={showArchived}
+        />}
+        iconElementRight={null}
+      />
+      <VisibleTweetsList />
+      {visitor ?
+        <div style={{textAlign: 'center'}}>
+          <RaisedButton
+            label='Login with ' primary={true}
+            linkButton={true} href='/auth'
+            icon={<TwitterIcon color='white' />}
           />
-        </ToolbarGroup>
-        { visitor ?
-          <ToolbarGroup float='right'>
-            <RaisedButton
-              label='Login' primary={true}
-              linkButton={true} href='/auth'
-              icon={<TwitterIcon color='white' />}
-            />
-          </ToolbarGroup>
-          : '' }
-        </Toolbar>
-        <VisibleTweetsList />
-      </Paper>
+        </div>
+        : null
+      }
+    </Paper>
   );
 }
+
+// </ToolbarGroup>
+// { visitor ?
+//   <ToolbarGroup float='right'>
+//     <RaisedButton
+//       label='Login' primary={true}
+//       linkButton={true} href='/auth'
+//       icon={<TwitterIcon color='white' />}
+//     />
+//   </ToolbarGroup>
+//   : '' }
 App.propTypes = {
   dispatch: PropTypes.func.isRequired,
   visitor: PropTypes.bool,
   showArchived: PropTypes.bool,
+  muiTheme: PropTypes.object
 };
 
 const mapStateToProps = (state) => ({
   visitor: !!state.visitor,
   showArchived: state.filter.indexOf('archived') > -1,
+  muiTheme: ThemeManager.getMuiTheme(appTheme),
 });
 
 export default connect(mapStateToProps)(App);

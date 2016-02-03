@@ -7,6 +7,11 @@ import CardTitle from 'material-ui/lib/card/card-title';
 import IconButton from 'material-ui/lib/icon-button';
 import CardText from 'material-ui/lib/card/card-text';
 
+const cardStyle = {
+  margin: "20px 10px",
+  boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
+}
+
 const Tweet = ({
   action,
   tid,
@@ -20,7 +25,7 @@ const Tweet = ({
   const hasURL = url.length > 0;
   const isArchived = tags.indexOf('archived') > -1;
   return (
-    <Card className="twitter">
+    <Card style={cardStyle}>
         <CardHeader className="header"
           title={'@' + user.screen_name}
           subtitle={<span className="date">{new Date(tweet.created_at).toLocaleString()}</span>}
@@ -51,7 +56,6 @@ const Tweet = ({
           <img src={media[0]} />
         </CardMedia>
       : <CardText>{tweet.text}</CardText> }
-      <CardText>{tags.join(', ')}</CardText>
     </Card>
   );
 };
