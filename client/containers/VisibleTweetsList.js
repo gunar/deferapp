@@ -12,7 +12,7 @@ const VisibleTweetsList = ({
   isInfiniteLoading,
   dispatch,
 }) => (
-  <div>
+  <div style={{marginTop: '74px'}}>
     <TweetList
       tweets={
         tweets.map(t => ({
