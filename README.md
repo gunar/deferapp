@@ -7,6 +7,7 @@
 - Make empty states (when there's no data to be shown)
  - Empty inbox
  - Empty Archived
+- Fix scroll (make smooth)
 
 ## npm scripts
 

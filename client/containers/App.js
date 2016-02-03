@@ -52,8 +52,19 @@ const App = ({
           onToggle={toggleFilter}
           toggled={showArchived}
         />}
+        iconElementRight={null}
       />
       <VisibleTweetsList />
+      {visitor ?
+        <div style={{textAlign: 'center'}}>
+          <RaisedButton
+            label='Login with ' primary={true}
+            linkButton={true} href='/auth'
+            icon={<TwitterIcon color='white' />}
+          />
+        </div>
+        : null
+      }
     </Paper>
   );
 }

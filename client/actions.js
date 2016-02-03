@@ -7,6 +7,31 @@ export const receiveTweets = (json) => ({
   visitor: (json.visitor || false),
 });
 
+export const toggleTweet = (tid, tags) => {
+  return dispatch => {
+    const archived = tags.indexOf('archived') > -1;
+    if (archived) {
+      dispatch({
+        type: 'UNARCHIVE_TWEET',
+        tid,
+      });
+    } else {
+      dispatch({
+        type: 'ARCHIVE_TWEET',
+        tid,
+      });
+    }
+    var url = '/api/tweet/archived/' + tid;
+    return fetch(
+      url,
+      {
+        credentials: 'same-origin',
+        method: (archived ? 'delete' : 'post'),
+      }
+    );
+  };
+};
+
 export const fetchTweets = (fromTid, filter = []) => {
   return dispatch => {
     dispatch({
