@@ -36,7 +36,7 @@ const App = ({
       <Toolbar>
         <ToolbarGroup
           float="left"
-          style={{'margin-top': 16}}
+          style={{'marginTop': 16}}
         >
           <Toggle
             labelPosition="right"
