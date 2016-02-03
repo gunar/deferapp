@@ -3,17 +3,23 @@ import { connect } from 'react-redux';
 
 import TweetList from '../components/TweetList';
 
-import { fetchTweets } from '../actions';
+import { fetchTweets, toggleTweet } from '../actions';
 // import { getVisibleTweets } from '../actions';
 
 const VisibleTweetsList = ({
   tweets,
   loadMore,
   isInfiniteLoading,
+  dispatch,
 }) => (
   <div>
     <TweetList
-      tweets={tweets}
+      tweets={
+        tweets.map(t => ({
+          ...t,
+          action: () => dispatch(toggleTweet(t.tid, t.tags)),
+        }))
+      }
       loadMore={loadMore}
       isInfiniteLoading={isInfiniteLoading}
     />
@@ -39,11 +45,7 @@ const mapStateToProps = (state) => ({
   isInfiniteLoading: state.loading,
 });
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
-  fetchTweets: (fromTid, filter) => dispatch(fetchTweets(fromTid, filter)),
-});
-
-const mergeProps = (stateProps, dispatchProps, ownProps) => {
+const mergeProps = (stateProps, { dispatch }, ownProps) => {
   let fromTid = 0;
   if (stateProps.tweets.length) {
     fromTid = stateProps.tweets.slice(-1)[0].tid;
@@ -51,8 +53,9 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
   return {
     ...ownProps,
     ...stateProps,
-    loadMore: () => dispatchProps.fetchTweets(fromTid, stateProps.filter),
+    loadMore: () => dispatch(fetchTweets(fromTid, stateProps.filter)),
+    dispatch,
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(VisibleTweetsList);
+export default connect(mapStateToProps, undefined, mergeProps)(VisibleTweetsList);

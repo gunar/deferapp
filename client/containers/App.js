@@ -39,8 +39,8 @@ const App = ({
           <ToolbarTitle text={showArchived ? 'Archive' : 'Inbox'}/>
         </ToolbarGroup>
         <ToolbarGroup
-          float='right'
-          style={{'margin-top': 16}}
+          float="right"
+          style={{'marginTop': 16}}
         >
           <Toggle
             labelPosition='right'
