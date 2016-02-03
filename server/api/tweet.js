@@ -92,33 +92,47 @@ const getTweetsByTags = (uid, tags, from_tid) => {
 };
 
 const visitorTweets = (tag, fromTid) => {
-  var data = [];
-
   if (fromTid && fromTid > 0) {
     // Return empty if asks for 2nd page in visitor mode
-    return { data, visitor: true };
+    return { data: [], visitor: true };
   }
-  if (tag === 'inbox') {
-    data = [
-      {
-        tid: 1,
-        tags: [],
-        tweet: {
-          favorite_count: 1,
-          retweet_count: 32,
-          text: 'Hi and welcome to FavBin!',
-          created_at: 'Sun Jan 31 19:58:04 +0000 2016',
-        },
-        user: {
-          profile_image_url_https: 'https://pbs.twimg.com/profile_images/620964435541233664/5YE8s2Di_normal.jpg',
-          screen_name: 'favbin',
-          name: 'FavBin',
-        },
-        url: [],
-        media: [],
+  const data = [
+    {
+      tid: 1,
+      tags: [],
+      tweet: {
+        favorite_count: 1,
+        retweet_count: 32,
+        text: 'Hi and welcome to FavBin!',
+        created_at: 'Sun Jan 31 19:58:04 +0000 2016',
       },
-    ];
-  }
+      user: {
+        profile_image_url_https: 'https://pbs.twimg.com/profile_images/620964435541233664/5YE8s2Di_normal.jpg',
+        screen_name: 'favbin',
+        name: 'FavBin',
+      },
+      url: [],
+      media: [],
+    },
+    {
+      tid: 2,
+      tags: ['archived'],
+      tweet: {
+        favorite_count: 1,
+        retweet_count: 32,
+        text: 'Here are your archived tweets',
+        created_at: 'Sun Jan 31 19:58:04 +0000 2016',
+      },
+      user: {
+        profile_image_url_https: 'https://pbs.twimg.com/profile_images/620964435541233664/5YE8s2Di_normal.jpg',
+        screen_name: 'favbin',
+        name: 'FavBin',
+      },
+      url: [],
+      media: [],
+    },
+  ];
+
   return { data, visitor: true };
 };
 
@@ -138,8 +152,13 @@ api.get('/tweet/:from_tid',
       });
 });
 
-api.get('/tweet/:tags/:from_tid', passport.authOnly,
+api.get('/tweet/:tags/:from_tid',
   function (req, res, next) {
+    if (!req.user) {
+      // Default tweets for not logged user
+      res.json(visitorTweets('archived', req.params.from_tid));
+      return;
+    }
     const tags = req.params.tags.split(',');
     getTweetsByTags(req.user.uid, tags, req.params.from_tid)
       .then(docs => {

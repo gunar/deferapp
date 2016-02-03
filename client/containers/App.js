@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import { fetchTweets } from '../actions';
 import VisibleTweetsList from './VisibleTweetsList';
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -16,6 +15,7 @@ import {
   DropDownMenu,
   RaisedButton,
   SvgIcon,
+  Toggle,
 } from 'material-ui/lib';
 
 
@@ -25,53 +25,48 @@ const TwitterIcon = (props) => (
   </SvgIcon>
 );
 
-//  fill="#55ACEE"
-class App extends Component {
-  componentDidMount() {
-    const { dispatch } = this.props;
-    // dispatch(fetchTweets());
-  }
-
-  setFilter(filter) {
-    const { dispatch } = this.props;
-    dispatch({type: 'SET_FILTER', filter});
-  };
-
-  render() {
-    const { visitor } = this.props;
-    return (
-      <Paper zDepth={2}>
-        <Toolbar>
-          <ToolbarGroup firstChild={true} float="left">
-            <DropDownMenu ref="filter_dropdown" value={this.props.activeFilter}>
-              <MenuItem value={""} primaryText="Unread" onClick={ () => this.setFilter("") }/>
-              <MenuItem value={"archived"} primaryText="Archived" onClick={ () => this.setFilter("archived") }/>
-            </DropDownMenu>
+const App = ({
+  visitor,
+  showArchived,
+  dispatch
+}) => {
+  const toggleFilter = () => dispatch({ type: 'TOGGLE_FILTER' });
+  return (
+    <Paper zDepth={2}>
+      <Toolbar>
+        <ToolbarGroup
+          float="left"
+          style={{'margin-top': 16}}
+        >
+          <Toggle
+            labelPosition="right"
+            onToggle={toggleFilter}
+            toggled={showArchived}
+          />
+        </ToolbarGroup>
+        { visitor ?
+          <ToolbarGroup lastChild float="right">
+            <RaisedButton
+              label="Login" primary={true}
+              linkButton={true} href="/auth"
+              icon={<TwitterIcon color="white" />}
+            />
           </ToolbarGroup>
-          { visitor ?
-            <ToolbarGroup lastChild float="right">
-              <RaisedButton
-                label="Login" primary={true}
-                href="/auth"
-                icon={<TwitterIcon color="white" />}
-              />
-            </ToolbarGroup>
           : '' }
         </Toolbar>
         <VisibleTweetsList />
       </Paper>
-    );
-  }
+  );
 }
 App.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  activeFilter: PropTypes.string.isRequired,
   visitor: PropTypes.bool,
+  showArchived: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({
   visitor: !!state.visitor,
-  activeFilter: state.filter.indexOf('archived') > -1 ? 'archived' : '',
+  showArchived: state.filter.indexOf('archived') > -1,
 });
 
 export default connect(mapStateToProps)(App);

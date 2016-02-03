@@ -1,14 +1,12 @@
 {
   "name": "favbin",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Read you fav'ed tweets",
   "main": "server.js",
   "scripts": {
     "start": "node --harmony server.js",
     "docker": "docker run -d -p 27017:27017 mongo",
     "watch": "nodemon -d 1 -w webpack.config.js -w ./server -w index.js --harmony index.js",
-    "test": "./node_modules/.bin/tape -r babel-register ./src/**/*.js*",
-    "test:watch": "./node_modules/.bin/nodemon ./node_modules/.bin/tape -r babel-register ./src/**/*.js*",
     "build": "NODE_ENV=production webpack"
   },
   "repository": {

@@ -25,8 +25,10 @@ VisibleTweetsList.propTypes = {
   isInfiniteLoading: PropTypes.bool.isRequired,
 };
 
+const notArchived = t => t.tags.indexOf('archived') == -1;
+
 const applyFilter = (tweets, filter) => {
-  if (filter.length == 0) return tweets;
+  if (filter.length == 0) return tweets.filter(notArchived);
   return tweets.filter(t => t.tags.indexOf(filter[0]) > -1);
 }
 

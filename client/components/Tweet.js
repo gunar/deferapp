@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
-// import TweetTagList from '../containers/TweetTagList';
 
+// List Layout
 import ListItem from 'material-ui/lib/lists/list-item';
 import Avatar from 'material-ui/lib/avatar';
 import IconButton from 'material-ui/lib/icon-button';
@@ -25,9 +25,7 @@ const rightIconMenu = (t) => (
     <MenuItem leftIcon={<FontIcon className="material-icons">check</FontIcon>}>Archive</MenuItem>
   </IconMenu>
 );
-
-
-const Tweet = (t) => (
+const TweetList = (t) => (
   <ListItem className="tweet"
     rightIconButton={rightIconMenu(t)}
     leftAvatar={<Avatar src={t.user.profile_image_url_https} />}
@@ -46,6 +44,39 @@ const Tweet = (t) => (
   />
 );
 
+// Card Layout
+import Card from 'material-ui/lib/card/card';
+import CardActions from 'material-ui/lib/card/card-actions';
+import CardHeader from 'material-ui/lib/card/card-header';
+import CardMedia from 'material-ui/lib/card/card-media';
+import CardTitle from 'material-ui/lib/card/card-title';
+import FlatButton from 'material-ui/lib/flat-button';
+import CardText from 'material-ui/lib/card/card-text';
+
+const TweetCard = (t) => {
+  const hasMedia = t.media.length > 0;
+  const hasURL = t.url.length > 0;
+  return (
+    <Card className="twitter">
+        <CardHeader className="header"
+          title={"@"+t.user.screen_name}
+          subtitle={<span className="date">{new Date(t.tweet.created_at).toLocaleString()}</span>}
+          avatar={t.user.profile_image_url_https}>
+          <div style={{float: "right"}}>
+            <IconButton iconClassName="material-icons" style={{margin: 0}}>launch</IconButton>
+            <IconButton iconClassName="material-icons" style={{margin: 0}}>done</IconButton>
+          </div>
+        </CardHeader>
+      { hasMedia ?
+        <CardMedia overlay={<CardTitle subtitle={t.tweet.text} />}>
+          <img src={t.media[0]} />
+        </CardMedia>
+      : <CardText>{t.tweet.text}</CardText> }
+    </Card>
+  );
+};
+
+const Tweet = TweetCard;
 Tweet.propTypes = {
   tid: PropTypes.number.isRequired,
   // tags: PropTypes.array.isRequired,
