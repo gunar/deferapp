@@ -3,9 +3,6 @@ import { connect } from 'react-redux';
 
 import VisibleTweetsList from './VisibleTweetsList';
 
-import injectTapEventPlugin from 'react-tap-event-plugin';
-injectTapEventPlugin();
-
 import {
   Paper,
   AppBar,
@@ -19,9 +16,6 @@ import {
   Toggle,
 } from 'material-ui/lib';
 import Colors from 'material-ui/lib/styles/colors';
-import appTheme from '../style/theme';
-import ThemeManager from 'material-ui/lib/styles/theme-manager';
-import ThemeDecorator from 'material-ui/lib/styles/theme-decorator';
 
 const TwitterIcon = (props) => (
   <SvgIcon {...props}>
@@ -70,16 +64,6 @@ const App = ({
   );
 }
 
-// </ToolbarGroup>
-// { visitor ?
-//   <ToolbarGroup float='right'>
-//     <RaisedButton
-//       label='Login' primary={true}
-//       linkButton={true} href='/auth'
-//       icon={<TwitterIcon color='white' />}
-//     />
-//   </ToolbarGroup>
-//   : '' }
 App.propTypes = {
   dispatch: PropTypes.func.isRequired,
   visitor: PropTypes.bool,
@@ -90,7 +74,6 @@ App.propTypes = {
 const mapStateToProps = (state) => ({
   visitor: !!state.visitor,
   showArchived: state.filter.indexOf('archived') > -1,
-  muiTheme: ThemeManager.getMuiTheme(appTheme),
 });
 
 export default connect(mapStateToProps)(App);
