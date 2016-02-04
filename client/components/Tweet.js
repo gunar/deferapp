@@ -57,7 +57,6 @@ const Tweet = ({
           <img src={media[0]} />
         </CardMedia>
         : <CardText>{tweet.text}</CardText> }
-      { hasTags ? <CardText>{tags.join(', ')}</CardText> : null }
     </Card>
   );
 };
