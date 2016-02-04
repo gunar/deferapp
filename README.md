@@ -3,6 +3,7 @@
 ## TODO
 
 - Write "tweets" for Visitor Mode
+- Fix logging
 - Make empty states (when there's no data to be shown)
  - Empty inbox
  - Empty Archived
