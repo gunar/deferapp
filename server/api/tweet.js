@@ -103,7 +103,7 @@ const visitorTweets = (tag, fromTid) => {
       tweet: {
         favorite_count: 1,
         retweet_count: 32,
-        text: 'Hi! Tweets you Like you be listed here.',
+        text: 'Hi! Tweets you Like will appear here.',
         created_at: 'Sun Jan 31 19:58:04 +0000 2016',
       },
       user: {
