@@ -1,14 +1,16 @@
+const TEST = process.env.NODE_ENV === 'test';
 import fetch from 'isomorphic-fetch';
 
-export const receiveTweets = (json) => ({
+export const receiveTweets = (json = {}) => ({
   type: 'RECEIVE_TWEETS',
-  tweets: json.data,
+  tweets: json.data || [],
   receivedAt: Date.now(),
-  visitor: (json.visitor || false),
+  visitor: !!json.visitor || false,
 });
 
 export const toggleTweet = (tid, tags) => {
   return dispatch => {
+    let url;
     const archived = tags.indexOf('archived') > -1;
     if (archived) {
       dispatch({
@@ -21,7 +23,7 @@ export const toggleTweet = (tid, tags) => {
         tid,
       });
     }
-    var url = '/api/tweet/archived/' + tid;
+    url = (TEST ? 'http://www.deferapp.com' : '') + '/api/tweet/archived/' + tid;
     return fetch(
       url,
       {
