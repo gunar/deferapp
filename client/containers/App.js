@@ -18,18 +18,18 @@ const barStyle = (showArchived) => ({
   position: 'fixed',
 });
 
-const title = showArchived => (<div
-  style={{
-    color: '#000',
-    textAlign: 'center',
-    marginLeft: '-56px',
-  }}
->
-  {showArchived ? 'Archive' : 'Inbox'}
-</div>);
+const title = showArchived => (
+  <div style={{
+    color: "#000",
+    textAlign: "center",
+    marginLeft: "-56px",
+  }}>
+    {showArchived ? "Archive" : "Inbox"}
+  </div>
+);
 
 const loginButton = () => (
-  <div style={{ textAlign: 'center' }}>
+  <div style={{ textAlign: "center" }}>
     <RaisedButton
       label="Login with "
       primary
@@ -42,7 +42,7 @@ const loginButton = () => (
 
 const toggle = (toggleFilter, showArchived) => (
   <Toggle
-    style={{ paddingTop: '14px', paddingLeft: '10px' }}
+    style={{ paddingTop: "14px", paddingLeft: "10px" }}
     labelPosition="right"
     onToggle={toggleFilter}
     toggled={showArchived}
@@ -56,7 +56,7 @@ const App = ({
 }) => {
   const toggleFilter = () => dispatch({ type: 'TOGGLE_FILTER' });
   return (
-    <Paper zDepth={0} style={{ overflowX: 'hidden' }}>
+    <Paper zDepth={0} style={{ overflowX: "hidden" }}>
       <AppBar
         style={barStyle(showArchived)}
         title={title(showArchived)}
