@@ -1,5 +1,6 @@
 {
   "extends": "eslint-config-airbnb",
+  "parser": "babel-eslint",
   "env": {
     "browser": true,
     "mocha": true,
@@ -13,8 +14,10 @@
     // Temporarily disabled due to babel-eslint issues:
     "block-scoped-var": 0,
     "padded-blocks": 0,
+    "babel/object-shorthand": 1,
   },
   "plugins": [
-    "react"
+    "react",
+    "babel"
   ]
 }
