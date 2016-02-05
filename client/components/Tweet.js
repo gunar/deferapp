@@ -27,14 +27,23 @@ const Tweet = ({
   const isArchived = tags.indexOf('archived') > -1;
   const gotoURL = hasURL ? () => {window.open(url[0])} : null;
   return (
-    <Card style={{...cardStyle, cursor: hasURL ? "pointer" : "inherith"}}
-          onClick={gotoURL}>
+    <Card style={cardStyle}>
         <CardHeader className="header"
           title={'@' + user.screen_name}
           subtitle={<span className="date">{new Date(tweet.created_at).toLocaleString()}</span>}
           avatar={user.profile_image_url_https}
         >
           <div style={{ float: "right" }}>
+            <IconButton
+                iconClassName="material-icons"
+                style={{ margin: 0 }}
+                linkButton
+                disabled={!hasURL}
+                href={url[0]}
+                target="_blank"
+            >
+              launch
+            </IconButton>
             <IconButton
               iconClassName="material-icons"
               style={{ margin: 0 }}
@@ -44,11 +53,13 @@ const Tweet = ({
             </IconButton>
           </div>
         </CardHeader>
+      <div style={{cursor: hasURL ? "pointer" : "inherith"}} onClick={gotoURL}>
       { hasMedia ?
         <CardMedia overlay={<CardTitle subtitle={tweet.text} />}>
           <img src={media[0]}/>
         </CardMedia>
         : <CardText>{tweet.text}</CardText> }
+      </div>
     </Card>
   );
 };
