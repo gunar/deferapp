@@ -54,7 +54,7 @@ const Tweet = ({
         </CardHeader>
       { hasMedia ?
         <CardMedia overlay={<CardTitle subtitle={tweet.text} />}>
-          <img src={media[0]} />
+          <img src={media[0]}/>
         </CardMedia>
         : <CardText>{tweet.text}</CardText> }
     </Card>

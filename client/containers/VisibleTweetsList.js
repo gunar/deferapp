@@ -12,7 +12,7 @@ const VisibleTweetsList = ({
   isInfiniteLoading,
   dispatch,
 }) => (
-  <div style={{marginTop: '74px'}}>
+  <div style={{ marginTop: 74 }}>
     <TweetList
       tweets={
         tweets.map(t => ({
@@ -31,12 +31,12 @@ VisibleTweetsList.propTypes = {
   isInfiniteLoading: PropTypes.bool.isRequired,
 };
 
-const notArchived = t => t.tags.indexOf('archived') == -1;
+const notArchived = t => t.tags.indexOf('archived') === -1;
 
 const applyFilter = (tweets, filter) => {
-  if (filter.length == 0) return tweets.filter(notArchived);
+  if (filter.length === 0) return tweets.filter(notArchived);
   return tweets.filter(t => t.tags.indexOf(filter[0]) > -1);
-}
+};
 
 const mapStateToProps = (state) => ({
   // entries: getVisibleEntries(state.entries, state.filters),
