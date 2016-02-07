@@ -1,8 +1,11 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import VisibleTweetsList from './VisibleTweetsList';
 import TwitterIcon from '../components/TwitterIcon';
+
+import MyRawTheme from '../style/theme';
+import ThemeManager from 'material-ui/lib/styles/theme-manager';
 
 import {
   Paper,
@@ -14,7 +17,6 @@ import {
 
 const barStyle = (showArchived) => ({
   boxShadow: '0 1px 10px rgba(0,0,0,0.1)',
-  backgroundColor: (showArchived ? '#ccc' : 'white'),
   position: 'fixed',
 });
 
@@ -40,44 +42,41 @@ const loginButton = () => (
   </div>
 );
 
-const toggle = (toggleFilter, showArchived) => (
-  <Toggle
-    style={{ paddingTop: "14px", paddingLeft: "10px" }}
-    labelPosition="right"
-    onToggle={toggleFilter}
-    toggled={showArchived}
-  />
-);
-
-const App = ({
-  visitor,
-  showArchived,
-  dispatch,
-}) => {
-  const toggleFilter = () => dispatch({ type: 'TOGGLE_FILTER' });
-  return (
-    <Paper zDepth={0} style={{ overflowX: "hidden" }}>
-      <AppBar
-        style={barStyle(showArchived)}
-        title={title(showArchived)}
-        iconElementLeft={toggle(toggleFilter, showArchived)}
-        iconElementRight={null}
-      />
-      <VisibleTweetsList />
-      { visitor ? loginButton() : null }
-    </Paper>
-  );
+class App extends Component {
+  getChildContext() {
+    return {
+      muiTheme: ThemeManager.getMuiTheme(MyRawTheme),
+    };
+  }
+  render() {
+    const { dispatch, visitor, showArchived } = this.props
+    const toggleFilter = () => dispatch({ type: 'TOGGLE_FILTER' });
+    return (
+      <Paper zDepth={0} style={{ overflowX: "hidden"}}>
+        <AppBar
+          style={barStyle(showArchived)}
+          title={<img src="/logo.svg" style={{height: "3rem", marginBottom: "-.5rem"}} />}
+          titleStyle={{textAlign: "center"}}
+          showMenuIconButton={false}
+        />
+        <VisibleTweetsList />
+        { visitor ? loginButton() : null }
+      </Paper>
+    )
+  }
 };
+
+App.childContextTypes = {
+  muiTheme: PropTypes.object,
+}
 
 App.propTypes = {
   dispatch: PropTypes.func.isRequired,
   visitor: PropTypes.bool,
-  showArchived: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({
   visitor: !!state.visitor,
-  showArchived: state.filter.indexOf('archived') > -1,
 });
 
 export default connect(mapStateToProps)(App);

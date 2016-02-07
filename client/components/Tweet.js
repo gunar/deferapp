@@ -6,10 +6,12 @@ import CardMedia from 'material-ui/lib/card/card-media';
 import CardTitle from 'material-ui/lib/card/card-title';
 import IconButton from 'material-ui/lib/icon-button';
 import CardText from 'material-ui/lib/card/card-text';
+import Snackbar from 'material-ui/lib/snackbar';
 
 const cardStyle = {
   margin: "20px 10px",
-  boxShadow: "0 4px 20px rgba(0,0,0,0.2)"
+  boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
+  backgroundColor: "#FFF"
 }
 
 const Tweet = ({
@@ -26,6 +28,7 @@ const Tweet = ({
   const hasTags = tags.length > 0;
   const isArchived = tags.indexOf('archived') > -1;
   const gotoURL = hasURL ? () => {window.open(url[0])} : null;
+
   return (
     <Card style={cardStyle}>
         <CardHeader className="header"
@@ -61,6 +64,7 @@ const Tweet = ({
         : <CardText>{tweet.text}</CardText> }
       </div>
     </Card>
+
   );
 };
 Tweet.propTypes = {
