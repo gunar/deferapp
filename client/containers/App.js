@@ -12,12 +12,14 @@ import {
   AppBar,
   RaisedButton,
   Toggle,
+  FontIcon,
 } from 'material-ui/lib';
 
 
 const barStyle = (showArchived) => ({
-  boxShadow: '0 1px 10px rgba(0,0,0,0.1)',
+  boxShadow: '0 1px 5px rgba(0,0,0,0.2)',
   position: 'fixed',
+  backgroundColor: '#FFF',
 });
 
 const title = showArchived => (
@@ -28,6 +30,17 @@ const title = showArchived => (
   }}>
     {showArchived ? "Archive" : "Inbox"}
   </div>
+);
+
+const toggle = (toggleFilter, showArchived) => (
+  <Toggle
+    style={{ paddingTop: "14px", paddingLeft: "10px" }}
+    alabel={<FontIcon style={{color: "#FFF"}} className="material-icons">{showArchived ? "beenhere" : "stars"}</FontIcon>}
+    labelStyle={{ color: "#FFF" }}
+    labelPosition="right"
+    onToggle={toggleFilter}
+    toggled={showArchived}
+  />
 );
 
 const loginButton = () => (
@@ -55,9 +68,9 @@ class App extends Component {
       <Paper zDepth={0} style={{ overflowX: "hidden"}}>
         <AppBar
           style={barStyle(showArchived)}
-          title={<img src="/logo.svg" style={{height: "3rem", marginBottom: "-.5rem"}} />}
+          title={<img src="/logo_b.svg" style={{height: "3rem", marginBottom: "-.5rem"}} />}
           titleStyle={{textAlign: "center"}}
-          showMenuIconButton={false}
+          iconElementLeft={toggle(toggleFilter, showArchived)}
         />
         <VisibleTweetsList />
         { visitor ? loginButton() : null }
@@ -77,6 +90,7 @@ App.propTypes = {
 
 const mapStateToProps = (state) => ({
   visitor: !!state.visitor,
+  showArchived: state.filter.indexOf('archived') > -1,
 });
 
 export default connect(mapStateToProps)(App);
