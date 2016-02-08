@@ -1,14 +1,9 @@
+const TEST = process.env.NODE_ENV === 'test';
 import fetch from 'isomorphic-fetch';
-
-export const receiveTweets = (json) => ({
-  type: 'RECEIVE_TWEETS',
-  tweets: json.data,
-  receivedAt: Date.now(),
-  visitor: (json.visitor || false),
-});
 
 export const toggleTweet = (tid, tags) => {
   return dispatch => {
+    let url;
     const archived = tags.indexOf('archived') > -1;
     if (archived) {
       dispatch({
@@ -21,31 +16,41 @@ export const toggleTweet = (tid, tags) => {
         tid,
       });
     }
-    var url = '/api/tweet/archived/' + tid;
-    return fetch(
+    url = (TEST ? 'http://www.deferapp.com' : '') + '/api/tweet/archived/' + tid;
+    return Promise.resolve(fetch(
       url,
       {
         credentials: 'same-origin',
         method: (archived ? 'delete' : 'post'),
       }
-    );
+    ));
   };
 };
 
-export const fetchTweets = (fromTid, filter = []) => {
+export const receiveTweets = (json = {}) => ({
+  type: 'RECEIVE_TWEETS',
+  tweets: json.data || [],
+  receivedAt: Date.now(),
+  visitor: !!json.visitor || false,
+});
+
+export const fetchTweets = (fromTid = 0, filter = []) => {
   return dispatch => {
+    let url = (TEST ? 'http://www.deferapp.com' : '');
     dispatch({
       type: 'REQUEST_TWEETS',
       fromTid,
-      filter
+      filter,
     });
-    var url = (filter.length > 0) ? '/api/tweet/'+filter.join(',')+'/' : '/api/tweet/'
-    return fetch(
-      url + (fromTid ? fromTid : 0),
+
+    url = url + ((filter.length > 0) ? '/api/tweet/' + filter.join(',') + '/' : '/api/tweet/');
+
+    return Promise.resolve(fetch(
+      url + fromTid,
       {
         credentials: 'same-origin',
       }
-    )
+    ))
     .then(req => req.json())
     .then(json => dispatch(receiveTweets(json)));
   };
