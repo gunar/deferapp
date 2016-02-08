@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import TweetList from '../components/TweetList';
 
 import { fetchTweets, toggleTweet } from '../actions';
+import { Toolbar, ToolbarGroup, IconButton, TextField, FontIcon, Toggle } from 'material-ui/lib';
+import ColorManipulator from 'material-ui/lib/utils/color-manipulator';
 // import { getVisibleTweets } from '../actions';
 
 const VisibleTweetsList = ({
@@ -11,20 +13,23 @@ const VisibleTweetsList = ({
   loadMore,
   isInfiniteLoading,
   dispatch,
-}) => (
-  <div style={{ marginTop: 74 }}>
-    <TweetList
-      tweets={
-        tweets.map(t => ({
-          ...t,
-          action: () => dispatch(toggleTweet(t.tid, t.tags)),
-        }))
-      }
-      loadMore={loadMore}
-      isInfiniteLoading={isInfiniteLoading}
-    />
-  </div>
-);
+  showingArchived,
+}) => {
+  return (
+    <div style={{ marginTop: 74 }}>
+      <TweetList
+        tweets={
+          tweets.map(t => ({
+            ...t,
+            action: () => dispatch(toggleTweet(t.tid, t.tags)),
+          }))
+        }
+        loadMore={loadMore}
+        isInfiniteLoading={isInfiniteLoading}
+      />
+    </div>)
+};
+
 VisibleTweetsList.propTypes = {
   tweets: PropTypes.array.isRequired,
   loadMore: PropTypes.func.isRequired,
