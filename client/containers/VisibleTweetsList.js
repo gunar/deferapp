@@ -8,16 +8,6 @@ import { Toolbar, ToolbarGroup, IconButton, TextField, FontIcon, Toggle } from '
 import ColorManipulator from 'material-ui/lib/utils/color-manipulator';
 // import { getVisibleTweets } from '../actions';
 
-const toggle = (toggleFilter, showArchived) => (
-  <Toggle
-    style={{ paddingTop: "14px", paddingLeft: "10px" }}
-    label="Archive"
-    labelStyle={{ color: "#FFF" }}
-    onToggle={toggleFilter}
-    toggled={showArchived}
-  />
-);
-
 const VisibleTweetsList = ({
   tweets,
   loadMore,
@@ -25,17 +15,8 @@ const VisibleTweetsList = ({
   dispatch,
   showingArchived,
 }) => {
-  const toggleFilter = () => dispatch({ type: 'TOGGLE_FILTER' });
   return (
-    <div style={{ marginTop: 64 }}>
-      <Toolbar style={{ backgroundColor: ColorManipulator.fade("#555273", .5) }}>
-        <ToolbarGroup float="left">
-          <TextField hintText={<span style={{color: "rgba(0,0,0,0.6)"}}><FontIcon className="material-icons" style={{bottom: "-6px"}} color="rgba(0,0,0,0.6)">search</FontIcon> Search...</span>}/>
-        </ToolbarGroup>
-        <ToolbarGroup float="right">
-          {toggle(toggleFilter, showingArchived)}
-        </ToolbarGroup>
-      </Toolbar>
+    <div style={{ marginTop: 74 }}>
       <TweetList
         tweets={
           tweets.map(t => ({
@@ -67,7 +48,6 @@ const mapStateToProps = (state) => ({
   tweets: applyFilter(state.tweets, state.filter),
   filter: state.filter,
   isInfiniteLoading: state.loading,
-  showingArchived: state.filter.indexOf('archived') > -1,
 });
 
 const mergeProps = (stateProps, { dispatch }, ownProps) => {
