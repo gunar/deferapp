@@ -9,7 +9,7 @@
     "start": "node --harmony index.js",
     "docker": "docker run -d -p 27017:27017 mongo",
     "watch": "nodemon -d 1 -w webpack.config.js -w ./server -w index.js --harmony index.js",
-    "openshift": "git push -f openshift production:master",
+    "openshift": "npm run build && git add dist/bundle.js && git commit -a -m \"build\" && git push -f openshift production:master",
     "build": "NODE_ENV=production webpack"
   },
   "repository": {
