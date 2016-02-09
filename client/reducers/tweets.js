@@ -1,4 +1,4 @@
-const tweetReducer = (tweet, action) => {
+const tweetReducer = (tweet = {}, action = {}) => {
   switch (action.type) {
     case 'UNARCHIVE_TWEET':
       return {
@@ -17,7 +17,8 @@ const tweetReducer = (tweet, action) => {
       return tweet;
   }
 };
-export default function tweets(state = [], action) {
+
+export default function tweets(state = [], action = {}) {
   switch (action.type) {
     case 'ARCHIVE_TWEET':
     case 'UNARCHIVE_TWEET':
