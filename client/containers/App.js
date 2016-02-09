@@ -68,7 +68,7 @@ class App extends Component {
       <Paper zDepth={0} style={{ overflowX: "hidden"}}>
         <AppBar
           style={barStyle(showArchived)}
-          title={<img src="/logo_b.svg" style={{height: "3rem", marginBottom: "-.5rem"}} />}
+          title={<img src="/logo_b.svg" style={{height: "2rem", marginBottom: "-.5rem"}} />}
           titleStyle={{textAlign: "center"}}
           iconElementLeft={toggle(toggleFilter, showArchived)}
         />
