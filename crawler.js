@@ -56,7 +56,7 @@ module.exports = function crawler(mongoose) {
         push(null, user);
         next();
       } else {
-        logger.info('No more users to be processed. Sleeping 10s.');
+        logger.verbose('No more users to be processed. Sleeping 10s.');
         setTimeout(next, 10*1000);
       }
     }).catch(function (err) {
@@ -66,7 +66,7 @@ module.exports = function crawler(mongoose) {
 
   var get = function (user, url, options) {
     if (user.rate_limit < 1) {
-      logger.info(user.uid + ' Limit reached.');
+      logger.verbose(user.uid + ' Limit reached.');
       return _(function (push, next) {
         push({ uid:user.uid, code: LIMIT_REACHED });
       });
@@ -133,7 +133,7 @@ module.exports = function crawler(mongoose) {
     logger.debug(user.uid + ' Trying to request favs from user since_id ' + (options.since_id || 0));
     return get(user, 'favorites/list', options)
       .map(function (favs) {
-        logger.info('Got ' + favs.length + 'favs');
+        logger.verbose('Got ' + favs.length + 'favs');
         if (!favs.length) {
           return _(function (push, next) {
             push({ uid:user.uid, code: NO_TWEET });

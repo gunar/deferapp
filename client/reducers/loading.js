@@ -1,4 +1,4 @@
-export default function loading(state = false, action) {
+export default function loading(state = false, action = {}) {
   switch (action.type) {
     case 'REQUEST_TWEETS':
       return true;

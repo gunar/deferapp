@@ -20,7 +20,7 @@ const session = require('express-session');
 const config = require('./config')[ENV];
 mongoose.connect(config.db, config.db_options || {});
 config.load_models();
-// const logger = require('./logger')(config.log, service);
+const logger = require('./logger')(config.log, 'server', 'info');
 
 const app = express();
 const MongoStore = require('connect-mongo')(session);
@@ -41,7 +41,7 @@ app.use(require('./server/routes/user'));
 app.use(express.static('./dist'));
 
 if (ENV === 'development') {
-  console.log('Using webpack-dev-middleware');
+  logger.debug('Using webpack-dev-middleware');
   const webpack = require('webpack');
   const webpackConfig = require('./webpack.config');
 
@@ -54,7 +54,7 @@ if (ENV === 'development') {
     stats: { colors: true },
   }));
   app.use(require('webpack-hot-middleware')(webpackCompiler, {
-    log: console.log,
+    log: logger.debug,
   }));
 }
 
@@ -68,8 +68,8 @@ if (ENV === 'development') {
 
 app.listen(PORT, IP, function err(error) {
   if (error) {
-    console.error('Unable to listen for connections', error);
+    logger.error('Unable to listen for connections', error);
     process.exit(1);
   }
-  console.info('==> Listening on port %s. Open up http://localhost:%s/ in your browser.', PORT, PORT);
+  logger.debug('==> Listening on port %s. Open up http://localhost:%s/ in your browser.', PORT, PORT);
 });
