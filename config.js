@@ -30,7 +30,7 @@ module.exports = {
       consumerSecret: "coSjuX1B2XR6LdR860KdlLP3yGZdEquJUkMVQ06q7IX0355R4O",
       callbackURL: "http://www.deferapp.com/auth/callback"
     },
-    logs: './logs/',
+    logs: process.env.OPENSHIFT_LOG_DIR,
     load_models: load_models
   }
 };
