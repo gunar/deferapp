@@ -8,12 +8,6 @@ import IconButton from 'material-ui/lib/icon-button';
 import CardText from 'material-ui/lib/card/card-text';
 import Snackbar from 'material-ui/lib/snackbar';
 
-const cardStyle = {
-  margin: "20px 10px",
-  boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
-  backgroundColor: "#FFF"
-}
-
 const Tweet = ({
   action,
   tid,
@@ -28,45 +22,25 @@ const Tweet = ({
   const hasTags = tags.length > 0;
   const isArchived = tags.indexOf('archived') > -1;
   const gotoURL = hasURL ? () => {window.open(url[0])} : null;
-
   return (
-    <Card style={cardStyle}>
-        <CardHeader className="header"
-          title={'@' + user.screen_name}
-          subtitle={<span className="date">{new Date(tweet.created_at).toLocaleString()}</span>}
-          avatar={user.profile_image_url_https}
-        >
-          <div style={{ float: "right" }}>
-            <IconButton
-                iconClassName="material-icons"
-                style={{ margin: 0 }}
-                linkButton
-                disabled={!hasURL}
-                href={url[0]}
-                target="_blank"
-            >
-              launch
-            </IconButton>
-            <IconButton
-              iconClassName="material-icons"
-              style={{ margin: 0 }}
-              onClick={ action }
-            >
-              { isArchived ? "move_to_inbox" : "done" }
-            </IconButton>
-          </div>
-        </CardHeader>
-      <div style={{cursor: hasURL ? "pointer" : "inherith"}} onClick={gotoURL}>
-      { hasMedia ?
-        <CardMedia overlay={<CardTitle subtitle={tweet.text} />}>
-          <img src={media[0]}/>
-        </CardMedia>
-        : <CardText>{tweet.text}</CardText> }
+    <div className="tweet card">
+      <div className="header">
+        <div className="avatar"><img src={user.profile_image_url_https}/></div>
+        <div className="info">{'@' + user.screen_name}<br/><span className="date">{new Date(tweet.created_at).toLocaleString()}</span></div>
+        <div className="icons">
+          <i className={hasURL ? "material-icons btn" : "material-icons btn disabled"} onClick={gotoURL}>launch</i>
+          <i onClick={ action } className="material-icons btn">{ isArchived ? "move_to_inbox" : "done" }</i>
+        </div>
       </div>
-    </Card>
-
+      <div className="body" style={{cursor: hasURL ? "pointer" : "default"}} onClick={gotoURL}>
+        { hasMedia
+          ? <div className="media"><img src={media[0]}/><div className="caption">{tweet.text}</div></div>
+          : <div className="text">{tweet.text}</div> }
+      </div>
+    </div>
   );
 };
+
 Tweet.propTypes = {
   action: PropTypes.func.isRequired,
   tid: PropTypes.number.isRequired,
