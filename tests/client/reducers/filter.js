@@ -33,6 +33,10 @@ test('reducer filter', t => {
   expected = [];
   t.deepEqual(actual, expected, 'RESET_FILTER should return empty array');
 
+  actual = filter('state');
+  expected = 'state';
+  t.equal(actual, expected, 'should return state if no action given');
+
   t.end();
 });
 
