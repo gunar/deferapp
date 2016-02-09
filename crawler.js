@@ -8,7 +8,7 @@ module.exports = function crawler(mongoose) {
   var env = process.env.NODE_ENV || 'development',
       service = 'crawler',
       config = require('./config')[env],
-      logger = require('./logger')(config.log, service, 'debug');
+      logger = require('./logger')(config.log, service, 'info');
 
   // Configurations
   var MINIMUM_INTERVAL_MINS = 1;
