@@ -1,11 +1,12 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import Waypoint from 'react-waypoint';
+
 
 import TweetList from '../components/TweetList';
 
 import { fetchTweets, toggleTweet } from '../actions';
 import { Toolbar, ToolbarGroup, IconButton, TextField, FontIcon, Toggle } from 'material-ui/lib';
-import ColorManipulator from 'material-ui/lib/utils/color-manipulator';
 // import { getVisibleTweets } from '../actions';
 
 const VisibleTweetsList = ({
@@ -24,9 +25,9 @@ const VisibleTweetsList = ({
             action: () => dispatch(toggleTweet(t.tid, t.tags)),
           }))
         }
-        loadMore={loadMore}
         isInfiniteLoading={isInfiniteLoading}
       />
+      <Waypoint onEnter={loadMore} scrollableParent={window} threshold={0.1}/>
     </div>)
 };
 
