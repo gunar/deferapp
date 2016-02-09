@@ -1,4 +1,4 @@
-export default function filter(state = [], action) {
+export default function filter(state = [], action = {}) {
   switch (action.type) {
     case 'ADD_FILTER':
       return [...state, action.filter];

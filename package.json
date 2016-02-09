@@ -4,8 +4,8 @@
   "description": "Read you fav'ed tweets",
   "main": "--harmony index.js",
   "scripts": {
-    "test": "NODE_ENV=test ./node_modules/.bin/babel-tape-runner tests/**/* | faucet",
-    "test:watch": "NODE_ENV=test nodemon ./node_modules/.bin/babel-tape-runner tests/**/*",
+    "test": "NODE_ENV=test ./node_modules/.bin/babel-tape-runner \"tests/**/*.js\"",
+    "test:watch": "nodemon --exec \"NODE_ENV=test ./node_modules/.bin/babel-tape-runner \\\"tests/**/*.js\\\"\"",
     "start": "node --harmony index.js",
     "docker": "docker run -d -p 27017:27017 mongo",
     "watch": "nodemon -d 1 -w webpack.config.js -w ./server -w index.js --harmony index.js",
@@ -39,7 +39,6 @@
     "winston": "^2.1.1"
   },
   "devDependencies": {
-    "babel-cli": "^6.4.5",
     "babel-core": "^6.4.5",
     "babel-eslint": "^5.0.0-beta9",
     "babel-loader": "^6.2.1",

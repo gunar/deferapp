@@ -20,7 +20,7 @@ const session = require('express-session');
 const config = require('./config')[ENV];
 mongoose.connect(config.db, config.db_options || {});
 config.load_models();
-const logger = require('./logger')(config.log, 'server', 'info');
+const logger = require('./logger')(config.logs_dir, 'server', 'info');
 
 const app = express();
 const MongoStore = require('connect-mongo')(session);
