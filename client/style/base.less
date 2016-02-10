@@ -5,22 +5,30 @@
 @bp-larger-than-desktop   : 1000px;
 @bp-larger-than-desktophd : 1200px;
 
-@primary: #60A0B0;
+// @primary: #60A0B0;
+@primary: #333;
+@link: lighten(@primary, 30%);
 @text: #000;
 
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,300,700,400italic);
 
 body {
   font-family: "Roboto", sans-serif;
+  font-color: @primary;
   margin: 0;
   background-color: #FFF;
 }
 
-body #root {
-  margin: 0 auto;
-
-  @media (min-width: @bp-larger-than-phablet) {
+a {
+  color: @link;
+  text-decoration: none;
+  &:hover {
+    color: @text;
   }
+}
+
+#root {
+  margin: 0 auto;
 }
 
 body #root .appbar {
@@ -42,15 +50,30 @@ body #root .appbar {
     position: absolute;
   }
   .left {
+    left: 0;
     float: left;
   }
   .right {
+    right: 0;
     float: right;
   }
 }
 
 .btn {
   cursor: pointer;
+}
+
+.btn.sqrd {
+  color: #fff;
+  background-color: @primary;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  padding: .5rem 1rem;
+  text-transform: uppercase;
+  transition: all 300ms ease;
+  &:hover {
+    background-color: lighten(@primary, 10%);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  }
 }
 
 .btn.bullet {
@@ -74,10 +97,11 @@ body #root .appbar {
 }
 
 .card_list {
-    @media (min-width: @bp-larger-than-phablet) {
-      max-width: 800px;
-      margin: auto;
-    }
+  margin-top: 60px;
+  @media (min-width: @bp-larger-than-desktop) {
+    max-width: 800px;
+    margin: auto;
+  }
 }
 
 .tweet.card {
@@ -107,6 +131,7 @@ body #root .appbar {
     .icons {
       float: right;
       line-height: 48px;
+      font-size: 24px;
     }
   }
   .body {
@@ -139,7 +164,7 @@ body #root .appbar {
   }
 }
 
-.material-icons {
+.mdi {
   line-height: inherit;
   &.disabled {
     color: lighten(@text, 75%);
@@ -147,7 +172,6 @@ body #root .appbar {
   &.btn {
     opacity: .7;
     padding: 2px;
-    cursor: pointer;
     &:hover {
       opacity: 1;
       &.disabled {

@@ -20,8 +20,8 @@ const Tweet = ({
         <div className="avatar"><img src={user.profile_image_url_https}/></div>
         <div className="info">{'@' + user.screen_name}<br/><span className="date">{new Date(tweet.created_at).toLocaleString()}</span></div>
         <div className="icons">
-          <i className={hasURL ? "material-icons btn" : "material-icons btn disabled"} onClick={gotoURL}>launch</i>
-          <i onClick={ action } className="material-icons btn">{ isArchived ? "move_to_inbox" : "done" }</i>
+          <i className={hasURL ? "mdi btn mdi-launch" : "mdi btn mdi-launch disabled"} onClick={gotoURL}/>
+          <i onClick={ action } className={ isArchived ? "mdi btn mdi-arrow-up" : "mdi mdi-check btn" }/>
         </div>
       </div>
       <div className="body" style={{cursor: hasURL ? "pointer" : "default"}} onClick={gotoURL}>

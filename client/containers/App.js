@@ -44,14 +44,10 @@ const toggle = (toggleFilter, showArchived) => (
 );
 
 const loginButton = () => (
-  <div style={{ textAlign: "center" }}>
-    <RaisedButton
-      label="Login with "
-      primary
-      linkButton
-      href="/auth"
-      icon={<TwitterIcon color="white" />}
-    />
+  <div style={{ textAlign: "center", paddingTop: 20 }}>
+    <a href="/auth" className="btn sqrd">
+      Login with <i className="mdi mdi-twitter"/>
+    </a>
   </div>
 );
 
