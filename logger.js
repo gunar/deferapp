@@ -1,9 +1,9 @@
+var fsPath = require('path');
 var winston = require('winston');
 
 var logger = function (path, prefix, level) {
   level = level || 'debug';
   path = path || './logs';
-  path = path + '/' + prefix + '-';
   var logger = new (winston.Logger)({
     transports: [
       new (winston.transports.Console)({
@@ -18,7 +18,7 @@ var logger = function (path, prefix, level) {
   levels.forEach(function (level) {
     logger.add(winston.transports.File, {
       name: level+'-file',
-      filename: path+level+'.log',
+      filename: fsPath.join(path, prefix + '-' + level + '.log'),
       level: level,
       json: true,
       maxsize: 5*1024,
