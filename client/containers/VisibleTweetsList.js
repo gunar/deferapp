@@ -2,19 +2,15 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Waypoint from 'react-waypoint';
 
-
 import TweetList from '../components/TweetList';
 
 import { fetchTweets, toggleTweet } from '../actions';
-import { Toolbar, ToolbarGroup, IconButton, TextField, FontIcon, Toggle } from 'material-ui/lib';
-// import { getVisibleTweets } from '../actions';
 
 const VisibleTweetsList = ({
   tweets,
   loadMore,
   isInfiniteLoading,
   dispatch,
-  showingArchived,
 }) => {
   return (
     <div style={{ marginTop: 0 }}>
@@ -28,7 +24,8 @@ const VisibleTweetsList = ({
         isInfiniteLoading={isInfiniteLoading}
       />
       <Waypoint onEnter={loadMore} scrollableParent={window} threshold={0.1}/>
-    </div>)
+    </div>
+  );
 };
 
 VisibleTweetsList.propTypes = {
