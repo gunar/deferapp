@@ -1,25 +1,21 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import VisibleTweetsList from './VisibleTweetsList';
 import AppBar from '../components/AppBar';
-
-const loginButton = () => (
-  <div style={{ textAlign: 'center', paddingTop: 20 }}>
-    <a href="/auth" className="btn sqrd">
-      Login with <i className="mdi mdi-twitter"/>
-    </a>
-  </div>
-);
+import LoginButton from '../components/LoginButton';
 
 const App = ({
   visitor,
 }) => {
   return (
     <div>
-    <AppBar/>
-    <VisibleTweetsList />
-    { visitor ? loginButton() : null }
+      <AppBar/>
+      <VisibleTweetsList />
+      { visitor
+        ? <LoginButton />
+        : ''
+      }
     </div>
   );
 };
@@ -29,7 +25,7 @@ App.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  visitor: !!state.visitor,
+  loading: state.loading,
 });
 
 export default connect(mapStateToProps)(App);
