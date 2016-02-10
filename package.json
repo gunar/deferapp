@@ -7,7 +7,7 @@
     "test": "NODE_ENV=test ./node_modules/.bin/babel-tape-runner \"tests/**/*.js\"",
     "test:watch": "nodemon --exec \"NODE_ENV=test ./node_modules/.bin/babel-tape-runner \\\"tests/**/*.js\\\"\"",
     "start": "node --harmony index.js",
-    "docker": "docker run -d -p 27017:27017 mongo",
+    "docker": "docker run -d -p 27017:27017 mongo:latest",
     "watch": "nodemon -d 1 -w webpack.config.js -w ./server -w index.js --harmony index.js",
     "build": "NODE_ENV=production webpack"
   },
