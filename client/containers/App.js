@@ -25,7 +25,7 @@ App.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  loading: state.loading,
+  visitor: state.visitor,
 });
 
 export default connect(mapStateToProps)(App);
