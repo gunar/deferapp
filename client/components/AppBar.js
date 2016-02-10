@@ -21,12 +21,8 @@ const AppBar = ({
 };
 
 AppBar.propTypes = {
-  action: PropTypes.func.isRequired,
-  tid: PropTypes.number.isRequired,
-  media: PropTypes.array.isRequired,
-  url: PropTypes.array.isRequired,
-  user: PropTypes.object.isRequired,
-  tweet: PropTypes.object.isRequired,
+  showArchived: PropTypes.bool.isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
