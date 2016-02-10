@@ -54,7 +54,7 @@ if (ENV === 'development') {
     stats: { colors: true },
   }));
   app.use(require('webpack-hot-middleware')(webpackCompiler, {
-    log: logger.debug,
+    log: logger.info,
   }));
 }
 
