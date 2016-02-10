@@ -9,7 +9,7 @@ const AppBar = ({
   return (
     <div className={ showArchived ? "appbar archive" : "appbar inbox" }>
       <div className="left">
-        <div className={ showArchived ? "btn bullet" : "btn bullet active" } onClick={toggleFilter}>
+        <div className={ showArchived ? "btn bullet active" : "btn bullet" } onClick={toggleFilter}>
           { showArchived ? "archive" : "inbox" }
         </div>
       </div>
