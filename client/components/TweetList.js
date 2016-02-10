@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
-import Tweet from '../components/Tweet';
+import Tweet from './Tweet';
+import EmptyTweetList from '../containers/EmptyTweetList';
 
 
 import List from 'material-ui/lib/lists/list';
@@ -19,6 +20,7 @@ const TweetList = ({
         {...tweet}
       />
     ))}
+    { tweets.length == 0 ? <EmptyTweetList /> : '' }
 
   </List>
 );
