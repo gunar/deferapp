@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 
 import VisibleTweetsList from './VisibleTweetsList';
 import TwitterIcon from '../components/TwitterIcon';
+import AppBar from '../components/AppBar';
 
 import MyRawTheme from '../style/theme';
 import ThemeManager from 'material-ui/lib/styles/theme-manager';
 
 import {
   Paper,
-  AppBar,
   RaisedButton,
   Toggle,
   FontIcon,
@@ -65,16 +65,11 @@ class App extends Component {
     const { dispatch, visitor, showArchived } = this.props
     const toggleFilter = () => dispatch({ type: 'TOGGLE_FILTER' });
     return (
-      <Paper zDepth={0} style={{ overflowX: "hidden"}}>
-        <AppBar
-          style={barStyle(showArchived)}
-          title={<img src="/logo_b.svg" style={{height: "3rem", marginBottom: "-.5rem"}} />}
-          titleStyle={{textAlign: "center"}}
-          iconElementLeft={toggle(toggleFilter, showArchived)}
-        />
+      <div>
+        <AppBar/>
         <VisibleTweetsList />
         { visitor ? loginButton() : null }
-      </Paper>
+      </div>
     )
   }
 };

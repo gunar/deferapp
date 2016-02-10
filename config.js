@@ -1,10 +1,11 @@
 var fs = require('fs');
+var path = require('path');
 
 // Load all models
 var load_models = function () {
-  var path = './server/models';
-  fs.readdirSync(path).forEach(function (file) {
-    require(path+'/'+file);
+  var rootPath = './server/models';
+  fs.readdirSync(rootPath).forEach(function (file) {
+    require('./' + path.join(rootPath, file));
   });
 };
 
@@ -18,7 +19,7 @@ module.exports = {
       consumerSecret: "ITwNvslkGgIHHZX9gNURKU8kYI8ehpENW4RWMbDaqqa9ipySPg",
       callbackURL: "http://127.0.0.1:3000/auth/callback"
     },
-    logs: './logs/',
+    logs_dir: './logs/',
     load_models: load_models
   },
   production: { //TODO: Update for production
@@ -30,7 +31,7 @@ module.exports = {
       consumerSecret: "coSjuX1B2XR6LdR860KdlLP3yGZdEquJUkMVQ06q7IX0355R4O",
       callbackURL: "http://www.deferapp.com/auth/callback"
     },
-    logs: process.env.OPENSHIFT_LOG_DIR,
+    logs_dir: process.env.OPENSHIFT_LOG_DIR,
     load_models: load_models
   }
 };
