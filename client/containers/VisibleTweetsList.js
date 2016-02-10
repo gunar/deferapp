@@ -17,7 +17,7 @@ const VisibleTweetsList = ({
   showingArchived,
 }) => {
   return (
-    <div style={{ marginTop: 74 }}>
+    <div style={{ marginTop: 0 }}>
       <TweetList
         tweets={
           tweets.map(t => ({

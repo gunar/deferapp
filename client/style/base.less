@@ -23,12 +23,63 @@ body #root {
   }
 }
 
+body #root .appbar {
+  position: fixed;
+  top: 0px;
+  z-index: 100;
+  width: 100%;
+  // background-color: #FFF;
+  line-height: 64px;
+  // box-shadow: 0 0px 6px rgba(0,0,0,0.2);
+  &.archive {
+    background-color: lighten(@primary, 20%);
+  }
+  .middle {
+    text-align: center;
+  }
+  .left, .right {
+    margin: 0 1rem;
+    position: absolute;
+  }
+  .left {
+    float: left;
+  }
+  .right {
+    float: right;
+  }
+}
+
+.btn {
+  cursor: pointer;
+}
+
+.btn.bullet {
+  margin-top: 1rem;
+  width: 4rem;
+  text-align: center;
+  padding: 0rem .3rem;
+  border-radius: .9rem;
+  line-height: 1.8rem;
+  font-size: .8rem;
+  vertical-align: middle;
+  color: @primary;
+  background-color: #FFF;
+  text-transform: uppercase;
+  box-shadow: 0 1px 0px fade(black, 20%);
+  transition: all 300ms ease;
+  &.active {
+    background-color: @primary;
+    color: #FFF;
+  }
+}
+
 .card_list {
     @media (min-width: @bp-larger-than-phablet) {
       max-width: 800px;
       margin: auto;
     }
 }
+
 .tweet.card {
   border-radius: 4px;
   overflow: hidden;

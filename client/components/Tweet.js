@@ -1,13 +1,5 @@
 import React, { PropTypes } from 'react';
 
-import Card from 'material-ui/lib/card/card';
-import CardHeader from 'material-ui/lib/card/card-header';
-import CardMedia from 'material-ui/lib/card/card-media';
-import CardTitle from 'material-ui/lib/card/card-title';
-import IconButton from 'material-ui/lib/icon-button';
-import CardText from 'material-ui/lib/card/card-text';
-import Snackbar from 'material-ui/lib/snackbar';
-
 const Tweet = ({
   action,
   tid,
