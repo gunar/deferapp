@@ -12,8 +12,7 @@ const TweetList = ({
         {...tweet}
       />
     ))}
-    { tweets.length === 0 ? <EmptyTweetList /> : '' }
-
+    <EmptyTweetList />
   </div>
 );
 

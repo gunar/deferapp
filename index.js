@@ -24,6 +24,7 @@ const logger = require('./logger')(config.logs_dir, 'server', 'info');
 
 const app = express();
 const MongoStore = require('connect-mongo')(session);
+const Log = mongoose.model('Log');
 
 require('./server/init.passport')(passport, config);
 app.use(require('compression')());
@@ -35,10 +36,26 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(express.static('./dist'));
+// DB Log Middleware.
+app.use(function(req, res, next) {
+  var uid = req.user && req.user.id ? req.user.id : null;
+  Log.create({
+    type: 'request',
+    data: {
+      uid: uid,
+      ip: req.ip,
+      method: req.method,
+      url: req.originalUrl }
+    })
+    .catch(function(e) {
+      logger.error('DB Log error:', e);
+    });
+  next();
+});
 app.use('/api/', require('./server/api/user'));
 app.use('/api/', require('./server/api/tweet'));
 app.use(require('./server/routes/user'));
-app.use(express.static('./dist'));
 
 if (ENV === 'development') {
   logger.debug('Using webpack-dev-middleware');
