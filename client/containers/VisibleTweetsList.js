@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 import Waypoint from 'react-waypoint';
 
 import TweetList from '../components/TweetList';
+import LoadingSpinner from '../containers/LoadingSpinner';
 
 import { fetchTweets, toggleTweet } from '../actions';
 
 const VisibleTweetsList = ({
   tweets,
   loadMore,
-  isInfiniteLoading,
   dispatch,
 }) => {
   return (
@@ -21,8 +21,8 @@ const VisibleTweetsList = ({
             action: () => dispatch(toggleTweet(t.tid, t.tags)),
           }))
         }
-        isInfiniteLoading={isInfiniteLoading}
       />
+      <LoadingSpinner />
       <Waypoint onEnter={loadMore} scrollableParent={window} threshold={0.1}/>
     </div>
   );
@@ -31,7 +31,6 @@ const VisibleTweetsList = ({
 VisibleTweetsList.propTypes = {
   tweets: PropTypes.array.isRequired,
   loadMore: PropTypes.func.isRequired,
-  isInfiniteLoading: PropTypes.bool.isRequired,
 };
 
 const notArchived = t => t.tags.indexOf('archived') === -1;
@@ -42,17 +41,20 @@ const applyFilter = (tweets, filter) => {
 };
 
 const mapStateToProps = (state) => ({
-  // entries: getVisibleEntries(state.entries, state.filters),
   tweets: applyFilter(state.tweets, state.filter),
   filter: state.filter,
   isInfiniteLoading: state.loading,
+  loading: state.loading,
 });
 
 const mergeProps = (stateProps, { dispatch }, ownProps) => {
+  const hasTweetsBeingDisplayed = stateProps.tweets.length > 0;
   let fromTid = 0;
-  if (stateProps.tweets.length) {
+
+  if (hasTweetsBeingDisplayed) {
     fromTid = stateProps.tweets.slice(-1)[0].tid;
   }
+
   return {
     ...ownProps,
     ...stateProps,

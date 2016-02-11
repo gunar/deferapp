@@ -186,3 +186,16 @@ body #root .appbar {
     }
   }
 }
+
+// Spinner
+@keyframes spin {
+  from {
+    transform: translate(-50px, 0);
+  }
+  to {
+    transform: translate(50px, 0);
+  }
+}
+.spinner {
+  animation: spin 1s infinite alternate ease-in-out;
+}
