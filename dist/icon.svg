@@ -17,9 +17,9 @@
    version="1.1"
    inkscape:version="0.91 r13725"
    sodipodi:docname="icon.svg"
-   inkscape:export-filename="/home/leo/Code/favbin/dist/icon32.png"
-   inkscape:export-xdpi="31.304348"
-   inkscape:export-ydpi="31.304348">
+   inkscape:export-filename="/home/leo/Code/favbin/dist/icon144.png"
+   inkscape:export-xdpi="140.86957"
+   inkscape:export-ydpi="140.86957">
   <defs
      id="defs4">
     <linearGradient
@@ -88,7 +88,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
