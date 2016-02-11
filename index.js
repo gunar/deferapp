@@ -39,10 +39,11 @@ app.use(passport.session());
 app.use(express.static('./dist'));
 // DB Log Middleware.
 app.use(function(req, res, next) {
+  var uid = req.user && req.user.id ? req.user.id : null;
   Log.create({
     type: 'request',
     data: {
-      uid: req.user.id || null,
+      uid: uid,
       ip: req.ip,
       method: req.method,
       url: req.originalUrl }
