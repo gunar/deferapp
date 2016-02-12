@@ -16,6 +16,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const session = require('express-session');
+const bodyParser = require('body-parser');
 
 const config = require('./config')[ENV];
 mongoose.connect(config.db, config.db_options || {});
@@ -27,6 +28,7 @@ const MongoStore = require('connect-mongo')(session);
 
 require('./server/init.passport')(passport, config);
 app.use(require('compression')());
+app.use(bodyParser.json());
 app.use(session({
 	saveUninitialized: true, // don't create session until something stored
 	resave: false, //don't save session if unmodified
@@ -43,6 +45,8 @@ app.use(require('./server/middlewares/log'));
 
 app.use('/dash/', require('./server/dash/'));
 
+// TODO: Put all /api subroutes inside server/api/index.js
+app.use('/api/', require('./server/api/log'));
 app.use('/api/', require('./server/api/user'));
 app.use('/api/', require('./server/api/tweet'));
 app.use(require('./server/routes/auth'));

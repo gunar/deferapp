@@ -20,7 +20,7 @@ const VisibleTweetsList = ({
           tweets.map(t => ({
             ...t,
             toggleTweet: () => dispatch(toggleTweet(t.tid, t.tags)),
-            openReader: () => dispatch(openReader(t.url[0])),
+            openReader: () => dispatch(openReader(t.url[0], t.tid)),
           }))
         }
       />

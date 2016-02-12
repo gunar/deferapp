@@ -23,6 +23,9 @@
 > for him to enter credit info.
 
 1. User has read and archived at least one tweet
+ [x] Track user site opening
+ [x] Track user archiving
+
 
 ## Retention
 
