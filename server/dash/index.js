@@ -1,58 +1,73 @@
 var express = require('express');
 var mongoose = require('mongoose');
 
-// var User = mongoose.model('User');
+var Log = mongoose.model('Log');
 var api = express.Router();
 
 var user = require('../controllers/user');
 
 
-
+const x = () => {
+  const date = new Date();
+  date.setDate(date.getDate() + Math.round(Math.random() * 20));
+  return date;
+};
+const y = () => (Math.round(Math.random() * 255));
 api.get('/', user.isAdmin, function (req, res, next) {
+  var data = (() => {
+    'use strict';
+    var o = [];
+    for (let i = 0; i <= 20; i++) {
+      o.push({
+        x: x(),
+        y: y()
+      });
+    }
+    return o;
+  })();
   var charts = [
     {
-      type: 'Line',
+      type: 'line',
       data: {
-        labels: ["January", "February", "March", "April", "May", "June", "July"],
-        datasets: [
-            {
-                label: "My First dataset",
-                fillColor: "rgba(220,220,220,0.2)",
-                strokeColor: "rgba(220,220,220,1)",
-                pointColor: "rgba(220,220,220,1)",
-                pointStrokeColor: "#fff",
-                pointHighlightFill: "#fff",
-                pointHighlightStroke: "rgba(220,220,220,1)",
-                data: [65, 59, 80, 81, 56, 55, 40]
-            },
-            {
-                label: "My Second dataset",
-                fillColor: "rgba(151,187,205,0.2)",
-                strokeColor: "rgba(151,187,205,1)",
-                pointColor: "rgba(151,187,205,1)",
-                pointStrokeColor: "#fff",
-                pointHighlightFill: "#fff",
-                pointHighlightStroke: "rgba(151,187,205,1)",
-                data: [28, 48, 40, 19, 86, 27, 90]
+        datasets: [{
+          label: 'Dataset with date object point data',
+          data: data
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          xAxes: [{
+            type: "time",
+            display: true,
+            scaleLabel: {
+              display: true,
+              labelString: 'Date'
             }
-        ]
+          }, ],
+          yAxes: [{
+            display: true,
+            scaleLabel: {
+              display: true,
+              labelString: 'value'
+            }
+          }]
+        }
       }
     }
   ];
 
-  var head = '<head><script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script></head>';
+  const script = s => '<script src="'+s+'"></script>';
+  var head = '<head>'+script('https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js')+script('https://raw.githubusercontent.com/nnnick/Chart.js/v2.0-dev/Chart.min.js')+'</head>';
   var body = charts.map((c, i) => ('<canvas id="' + i + '" width="'+(c.w || 400)+'" height="'+(c.h || 400)+'"></canvas>'));
-  var script = (() => {
-    const s = charts.map((c, i) => {
+  var chartScript = (() => {
+    const s = charts.map((config, i) => {
       const ctx = 'document.getElementById('+i+').getContext("2d")'
-      const type = c.type || 'Line';
-      const data = c.data || {};
-      const options = c.options || {};
-      return 'var chart'+i+' = new Chart('+ctx+').'+type+'('+JSON.stringify(data)+','+JSON.stringify(options)+');';
+      return 'var chart'+i+' = new Chart('+ctx+', '+JSON.stringify(config)+');';
     });
     return '<script>' + s + '</script>';
   })();
-  var html = '<html>' + head + body + script + '</html>';
+  var html = '<html>' + head + body + chartScript + '</html>';
   res.send(html);
 });
 
