@@ -1,7 +1,7 @@
 var mongoose = require('mongoose'),
     User = mongoose.model('User');
 
-var admins = [10417972];
+var admins = [10417972, 2710378388];
 
 module.exports = {
   signin: function(req, res) { },

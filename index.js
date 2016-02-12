@@ -28,23 +28,24 @@ const MongoStore = require('connect-mongo')(session);
 require('./server/init.passport')(passport, config);
 app.use(require('compression')());
 app.use(session({
-	saveUninitialized: false, // don't create session until something stored
+	saveUninitialized: true, // don't create session until something stored
 	resave: false, //don't save session if unmodified
 	secret: 'all your base are belong to us.',
 	store: new MongoStore({ mongooseConnection: mongoose.connection})
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(require('./server/middlewares/aarrr'));
 app.use(express.static('./dist'));
 
 // Logging middleware
-app.use(require('./server/log'));
+app.use(require('./server/middlewares/log'));
 
 app.use('/dash/', require('./server/dash/'));
 
 app.use('/api/', require('./server/api/user'));
 app.use('/api/', require('./server/api/tweet'));
-app.use(require('./server/routes/user'));
+app.use(require('./server/routes/auth'));
 
 if (ENV === 'development') {
   logger.debug('Using webpack-dev-middleware');
