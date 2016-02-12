@@ -4,6 +4,7 @@ import Waypoint from 'react-waypoint';
 
 import TweetList from '../components/TweetList';
 import LoadingSpinner from '../containers/LoadingSpinner';
+import EmptyTweetList from '../containers/EmptyTweetList';
 
 import { fetchTweets, toggleTweet } from '../actions';
 
@@ -22,8 +23,9 @@ const VisibleTweetsList = ({
           }))
         }
       />
-      <LoadingSpinner />
       <Waypoint onEnter={loadMore} scrollableParent={window} threshold={0.1}/>
+      <EmptyTweetList />
+      <LoadingSpinner />
     </div>
   );
 };
