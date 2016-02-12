@@ -35,9 +35,10 @@
 
 > Don't yet throw payment forms in front of these users.
 
-1. User opened the app a second time and reading/archiving at least one tweet
+1. User opened the app a second time and read & archived at least one tweet
+ - Use user site opening & user archiving tracks
 
-## Referral
+## Referral (TODO)
 
 > "Refer a friend and we'll give you more storage space for free"
 > You can break your referral metric into 2 stages:
@@ -47,6 +48,4 @@
 [ ] Add referred_by on user registration
 [ ] Add share buttons, promo codes, affiliate links...
 
-## Revenue
-
-Later on (hopefully!)
+## Revenue (TODO)
