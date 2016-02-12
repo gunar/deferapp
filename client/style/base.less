@@ -187,6 +187,43 @@ body #root .appbar {
   }
 }
 
+.reader {
+  z-index: 200;
+  position: fixed;
+  background-color: fade(black, 0%);
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 0;
+  overflow: hidden;
+  transition: background-color 1.5s ease;
+
+  &.open {
+    width: 100%;
+    background-color: fade(black, 70%);
+  }
+  .close_area {
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 38.2%;
+    position: absolute;
+    cursor: pointer;
+  }
+  .container {
+    right: 0;
+    top: 0;
+    height: 100%;
+    position: absolute;
+    width: 61.8%;
+    iframe {
+      height: 100%;
+      width: 100%;
+      border: none;
+    }
+  }
+}
+
 // Spinner
 @keyframes spin {
   from {

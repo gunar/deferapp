@@ -55,3 +55,12 @@ export const fetchTweets = (fromTid = 0, filter = []) => {
     .then(json => dispatch(receiveTweets(json)));
   };
 };
+
+export const openReader = (url = '') => ({
+  type: 'OPEN_READER',
+  url,
+});
+
+export const closeReader = () => ({
+  type: 'CLOSE_READER',
+});

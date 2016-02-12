@@ -5,7 +5,7 @@ import Waypoint from 'react-waypoint';
 import TweetList from '../components/TweetList';
 import LoadingSpinner from '../containers/LoadingSpinner';
 
-import { fetchTweets, toggleTweet } from '../actions';
+import { fetchTweets, toggleTweet, openReader } from '../actions';
 
 const VisibleTweetsList = ({
   tweets,
@@ -18,7 +18,8 @@ const VisibleTweetsList = ({
         tweets={
           tweets.map(t => ({
             ...t,
-            action: () => dispatch(toggleTweet(t.tid, t.tags)),
+            toggleTweet: () => dispatch(toggleTweet(t.tid, t.tags)),
+            openReader: () => dispatch(openReader(t.url[0])),
           }))
         }
       />

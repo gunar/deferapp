@@ -2,7 +2,8 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import VisibleTweetsList from './VisibleTweetsList';
-import AppBar from '../components/AppBar';
+import AppBar from './AppBar';
+import Reader from './Reader';
 import LoginButton from '../components/LoginButton';
 
 const App = ({
@@ -16,6 +17,7 @@ const App = ({
         ? <LoginButton />
         : ''
       }
+      <Reader/>
     </div>
   );
 };
