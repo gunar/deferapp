@@ -76,7 +76,6 @@ body #root .appbar {
     box-shadow: 0 4px 20px rgba(0,0,0,0.2);
   }
 }
-
 .btn.bullet {
   margin-top: 1rem;
   width: 4rem;
@@ -196,11 +195,11 @@ body #root .appbar {
   height: 100%;
   width: 0;
   overflow: hidden;
-  transition: background-color 1.5s ease;
+  // transition: background-color 1.5s ease;
 
   &.open {
     width: 100%;
-    background-color: fade(black, 70%);
+    background-color: fade(black, 80%);
   }
   .close_area {
     left: 0;
@@ -210,16 +209,34 @@ body #root .appbar {
     position: absolute;
     cursor: pointer;
   }
+  .controls {
+    position: absolute;
+    z-index: 220;
+    top: 0;
+    height: 64px;
+    padding: 1rem;
+    .btn.bullet {
+      width: 5rem;
+      box-shadow: 0 1px 6px fade(black, 20%);
+    }
+  }
   .container {
     right: 0;
     top: 0;
     height: 100%;
     position: absolute;
-    width: 61.8%;
+    width: 100%;
     iframe {
+      z-index: 210;
       height: 100%;
       width: 100%;
       border: none;
+    }
+  }
+
+  @media (min-width: @bp-larger-than-desktop) {
+    .container {
+      width: 61.8%;
     }
   }
 }

@@ -8,9 +8,17 @@ const Reader = ({
   url,
   dispatch,
 }) => {
+  const close = () => dispatch(closeReader());
+  const archive = () => {
+
+  };
   return (
     <div className={ "reader" + (isOpen ? " open" : "") }>
-      <div className="close_area" onClick={ () => dispatch(closeReader())}></div>
+      <div className="close_area" onClick={close}></div>
+      <div className="controls">
+      <div className="btn bullet" onClick={close}><a><i className="mdi mdi-arrow-left"/> Return</a></div>
+        {/*<div className="btn bullet"><a><i className="mdi mdi-check"/> Archive</a></div>*/}
+      </div>
       <div className="container">
         {isOpen ? <iframe src={url}></iframe> : null }
       </div>
