@@ -40,6 +40,8 @@ app.use(express.static('./dist'));
 // Logging middleware
 app.use(require('./server/log'));
 
+app.use('/dash/', require('./server/dash/'));
+
 app.use('/api/', require('./server/api/user'));
 app.use('/api/', require('./server/api/tweet'));
 app.use(require('./server/routes/user'));
