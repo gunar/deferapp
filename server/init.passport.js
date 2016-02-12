@@ -32,6 +32,7 @@ module.exports = function(passport, config) {
         if (err) { return done(err); }
         // Create new user.
         if (!user) {
+
           user = new User({
             uid: profile._json.id,
             name: profile.displayName,
@@ -42,11 +43,13 @@ module.exports = function(passport, config) {
           });
           user.save(function (err) {
             if (err) console.log(err);
+            user.new = true;
             return done(err, user);
           });
         }
         // Refresh user info.
         else {
+
           user.update({
             uid: profile._json.id,
             name: profile.displayName,
@@ -55,6 +58,7 @@ module.exports = function(passport, config) {
             tokens: {key: token, secret: tokenSecret},
             avatar: profile._json.profile_image_url_https
           }, function(err) {
+            user.new = false;
             return done(err, user);
           });
         }
