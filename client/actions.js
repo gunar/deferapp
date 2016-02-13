@@ -71,6 +71,7 @@ export const openReader = (url = '', tid = 0) => {
   return {
     type: 'OPEN_READER',
     url,
+    tid
   };
 };
 

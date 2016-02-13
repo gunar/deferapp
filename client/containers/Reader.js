@@ -6,12 +6,11 @@ import { closeReader } from '../actions';
 const Reader = ({
   isOpen,
   url,
+  tid,
   dispatch,
 }) => {
   const close = () => dispatch(closeReader());
-  const archive = () => {
-
-  };
+  const archive = () => {};
   return (
     <div className={ "reader" + (isOpen ? " open" : "") }>
       <div className="close_area" onClick={close}></div>
@@ -29,13 +28,14 @@ const Reader = ({
 Reader.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   url: PropTypes.string.isRequired,
+  tid: PropTypes.number.isRequired,
   dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   isOpen: state.reader.isOpen,
   url: state.reader.url,
-
+  tid: state.reader.tid,
 });
 
 export default connect(mapStateToProps)(Reader);

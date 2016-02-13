@@ -1,9 +1,11 @@
 const express = require('express');
 const passport = require('passport');
 const mongoose = require('mongoose');
+const rp = require('request-promise');
 
 const User = mongoose.model('User');
 const TagList = mongoose.model('TagList');
+const Tweet = mongoose.model('Tweet');
 const Log = mongoose.model('Log');
 const api = express.Router();
 
@@ -186,6 +188,21 @@ api.get('/tweet/:tags/:from_tid',
       });
   }
 );
+
+api.get('/tweetfetch/:tid/', passport.authOnly,
+  function (req, res, next) {
+    var fetch = rp.defaults({followAllRedirects: true});
+    Tweet
+      .findOne({tid: req.params.tid}).exec()
+      .then(t => {
+        if (t.tweet.entities && t.tweet.entities.urls && t.tweet.entities.urls.length) {
+          var url = t.tweet.entities.urls[0].expanded_url;
+          fetch.get(url).pipe(res);
+        } else {
+          res.send('No urls on this tweet.');
+        }
+      });
+});
 
 api.post('/tweet/:tags/:tid', passport.authOnly,
   function (req, res, next) {
