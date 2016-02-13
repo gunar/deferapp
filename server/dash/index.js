@@ -95,11 +95,11 @@ const uniqueUserVisitsByDay = () =>
     )
   ).then(results => results.map(o => ({ date: o._id, value: (o.value.uniques || 1) })));
 
-const uniqueUserReadsByDay = () =>
+const uniqueUserActionsByDay = action =>
   Promise.resolve(
     Log.mapReduce(
       {
-        query: { type: 'user_opened_reader' },
+        query: { type: action },
         map: function () {
           var date = new Date(this.date);
           var dateKey = [date.getFullYear(), date.getMonth()+1, date.getDate()].join('-');
@@ -117,6 +117,9 @@ const uniqueUserReadsByDay = () =>
       }
     )
   ).then(results => results.map(o => ({ date: o._id, value: (o.value.uniques || 1) })));
+
+const uniqueUserReadsByDay = () => uniqueUserActionsByDay('user_opened_reader');
+const uniqueUserArchivesByDay = () => uniqueUserActionsByDay('user_archived_tweet');
 
 const randomColorFactor = () => Math.round(Math.random() * 255);
 const randomColor = opacity => 'rgba(' + randomColorFactor() + ',' + randomColorFactor() + ',' + randomColorFactor() + ',' + (opacity || '.3') + ')';
@@ -163,6 +166,7 @@ api.get('/', user.isAdmin, function (req, res, next) {
     datasetFor('user_signed_in'),
     uniqueUserVisitsByDay(),
     uniqueUserReadsByDay(),
+    uniqueUserArchivesByDay(),
     // datasetFor('user_opened_reader'),
     // datasetFor('user_archived_tweet'),
   ]).then(rawDatasets => {
@@ -190,8 +194,7 @@ api.get('/', user.isAdmin, function (req, res, next) {
     const user_signed_in = datasets[1];
     const unique_user_visits = datasets[2];
     const unique_user_read = datasets[3];
-    // const user_opened_reader = datasets[1];
-    // const user_archived_tweet = datasets[3];
+    const unique_user_archives = datasets[4];
 
     const cohortize = (stat, base) => {
       return stat.map(d => {
@@ -221,13 +224,20 @@ api.get('/', user.isAdmin, function (req, res, next) {
       backgroundColor: randomColor(1),
       data: cohortize(unique_user_read, activated_1),
     };
+    const activated_3 = {
+      label: 'Activated: Archived',
+      backgroundColor: randomColor(1),
+      data: cohortize(unique_user_archives, activated_2),
+    };
 
     const html = makeHTML([
+      activated_3,
       activated_2,
       activated_1,
       engaged,
       landed,
     ]);
+
     res.send(html);
 
   }).catch(e => console.log(e));
