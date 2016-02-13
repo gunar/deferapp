@@ -192,13 +192,13 @@ api.post('/tweet/:tags/:tid', passport.authOnly,
     const tags = req.params.tags.split(',');
 
     if (tags.indexOf('archived') > -1) {
-      Log.create({
+      Promise.resolve(Log.create({
         type: 'user_archived_tweet',
         data: {
           uid: req.user.uid,
           tid: req.params.tid,
         }
-      }).catch(e => logger.error('DB Log error:', e));
+      })).catch(e => logger.error('DB Log error:', e));
     }
 
 

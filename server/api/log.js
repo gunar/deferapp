@@ -11,14 +11,14 @@ route.post('/log/open_reader', passport.authOnly, (req, res, next) => {
   const url = req.body && req.body.url;
   const tid = req.body && req.body.tid;
   if (url) {
-    Log.create({
+    Promise.resolve(Log.create({
       type: 'user_opened_reader',
       data: {
         uid: req.user.uid,
         url,
         tid,
       }
-    }).catch(e => logger.error('DB Log error:', e));
+    })).catch(e => logger.error('DB Log error:', e));
   }
 });
 
