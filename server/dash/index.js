@@ -60,25 +60,37 @@ function datasetFor(type) {
     query: { type: type },
     map: function () {
       var date = new Date(this.date);
-      var dateKey = [date.getFullYear(), date.getMonth()+1, date.getDate()].join('/');
+      var dateKey = [date.getFullYear(), date.getMonth()+1, date.getDate()].join('-');
       emit(dateKey, 1);
     },
     reduce: function (k, values) {
       return values.length;
     },
-  })).then(results => {
-    var data = results.map(r => {
-      return {
-        x: new Date(r._id),
-        y: r.value,
-      };
-    });
-    return {
-      label: type,
-      data: data,
-    };
-  });
+  })).then(results => results.map(o => ({ date: o._id, value: o.value })));
 }
+
+const uniqueUserVisitsByDay = () =>
+  Promise.resolve(
+    Log.mapReduce(
+      {
+        query: { type: 'request', 'data.url': '/' },
+        map: function () {
+          var date = new Date(this.date);
+          var dateKey = [date.getFullYear(), date.getMonth()+1, date.getDate()].join('-');
+          emit(dateKey, this.data.uid || 0);
+        },
+        reduce: function (k, values) {
+          var uniques = [];
+          for (var i = 0; i < values.length; i++) {
+            if (uniques.indexOf(values[i]) == -1) {
+              uniques.push(values[i]);
+            }
+          }
+          return { uniques: uniques.length };
+        },
+      }
+    )
+  ).then(results => results.map(o => ({ date: o._id, value: (o.value.uniques || 1) })));
 
 const randomColorFactor = () => Math.round(Math.random() * 255);
 const randomColor = opacity => 'rgba(' + randomColorFactor() + ',' + randomColorFactor() + ',' + randomColorFactor() + ',' + (opacity || '.3') + ')';
@@ -94,27 +106,25 @@ function makeRangeOfDays(startDate, stopDate) {
   var dateArray = new Array();
   var currentDate = startDate;
   while (currentDate <= stopDate) {
-    dateArray.push( new Date (currentDate) )
+    dateArray.push(new Date (currentDate))
     currentDate = currentDate.addDays(1);
   }
   return dateArray;
 }
-const getDates = dataset => dataset.data.map(d => d.x);
 
 const min = (cur, next) => next > cur ? cur : next;
 const max = (cur, next) => next < cur ? cur : next;
-const byX = (a, b) => a.x > b.x;
+const byDate = (a, b) => a.date > b.date;
 
 const concat = (cur, next) => cur.concat(next);
-const getAllDates = dataset => dataset.map(getDates).reduce(concat, []);
+const getDates = dataset => dataset.map(o => new Date(o.date));
+const getAllDates = datasets => datasets.map(getDates).reduce(concat, []);
 
 const parseDate = date => [date.getFullYear(), date.getMonth()+1, date.getDate()].join('-');
 const dayExistsIn = (day, dataset) => {
   'use strict';
-  const data = dataset.data;
-  const date = parseDate(day);
-  for (let i = 0; i < data.length; i++) {
-    if (parseDate(data[i].x) == date) { return true; }
+  for (let i = 0; i < dataset.length; i++) {
+    if (dataset[i].date == day) { return true; }
   }
   return false;
 };
@@ -124,35 +134,37 @@ api.get('/', user.isAdmin, function (req, res, next) {
 
   Promise.all([
     datasetFor('user_landed'),
-    datasetFor('user_opened_reader'),
     datasetFor('user_signed_in'),
-    datasetFor('user_archived_tweet'),
+    // datasetFor('user_opened_reader'),
+    // datasetFor('user_archived_tweet'),
   ]).then(rawDatasets => {
 
     const firstDay = getAllDates(rawDatasets).reduce(min);
     const lastDay = getAllDates(rawDatasets).reduce(max);
     const range = makeRangeOfDays(firstDay, lastDay);
 
-    const datasets = rawDatasets;
+    const toTypeDate = o => ({ date: new Date(o.date), value: o.value });
+    const toGraph = item => ({ x: item.date, y: item.value });
 
     // Fill missing days with y: 0
-    datasets = datasets.map(dataset => {
-      range.map(day => {
-        if (!dayExistsIn(day, dataset)) {
-          dataset.data.push({ x: day, y: 0 });
-        }
-      });
-      dataset.data = dataset.data.sort(byX);
-      return dataset;
+    const datasets = rawDatasets.map(dataset => {
+      range
+        .map(day => parseDate(day))
+        .map(day => {
+          if (!dayExistsIn(day, dataset)) {
+            dataset.push({ date: day, value: 0 });
+          }
+        });
+      return dataset.map(toTypeDate).sort(byDate).map(toGraph);
     });
 
-    const user_landed = rawDatasets[0];
-    const user_opened_reader = rawDatasets[1];
-    const user_signed_in = rawDatasets[2];
-    const user_archived_tweet = rawDatasets[3];
+    const user_landed = datasets[0];
+    const user_signed_in = datasets[1];
+    // const user_opened_reader = datasets[1];
+    // const user_archived_tweet = datasets[3];
 
     const cohortize = (stat, base) => {
-      return stat.data.map(d => {
+      return stat.map(d => {
         d.y += base.data.filter(p => parseDate(p.x) == parseDate(d.x))[0].y;
         return d;
       });
@@ -162,7 +174,7 @@ api.get('/', user.isAdmin, function (req, res, next) {
     const landed = {
       label: 'Landed',
       backgroundColor: randomColor(1),
-      data: user_landed.data,
+      data: user_landed,
     };
     const engaged = {
       label: 'Engaged',
