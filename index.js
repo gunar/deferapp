@@ -69,12 +69,12 @@ if (ENV === 'development') {
   }));
 }
 
-// if (ENV !== 'development') {
+if (ENV !== 'development') {
   var crawler = require('./crawler')(mongoose);
   crawler.each(function (user) {
       // this functions consumes the Highland stream
     });
-// }
+}
 
 
 app.listen(PORT, IP, function err(error) {

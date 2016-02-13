@@ -8,7 +8,7 @@ var route = express.Router();
 route.use(function(req, res, next) {
   var uid = req.user && req.user.id ? req.user.id : null;
 
-  Log.create({
+  Promise.resolve(Log.create({
     type: 'request',
     data: {
       uid: uid,
@@ -16,7 +16,7 @@ route.use(function(req, res, next) {
       method: req.method,
       url: req.originalUrl
     }
-  }).catch(e => logger.error('DB Log error:', e));
+  })).catch(e => logger.error('DB Log error:', e));
 
   next();
 
