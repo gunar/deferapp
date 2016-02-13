@@ -151,20 +151,27 @@ api.get('/', user.isAdmin, function (req, res, next) {
     const user_signed_in = rawDatasets[2];
     const user_archived_tweet = rawDatasets[3];
 
+    const cohortize = (stat, base) => {
+      return stat.data.map(d => {
+        d.y += base.data.filter(p => parseDate(p.x) == parseDate(d.x))[0].y;
+        return d;
+      });
+    };
+
     const landed = {
       label: 'Landed',
+      backgroundColor: randomColor(1),
       data: user_landed.data,
-      backgroundColor: randomColor(0.5),
     };
     const engaged = {
       label: 'Engaged',
-      data: user_signed_in.data,
-      backgroundColor: randomColor(0.5),
+      backgroundColor: randomColor(1),
+      data: cohortize(user_signed_in, landed),
     };
 
     const html = makeHTML([
-      landed,
       engaged,
+      landed,
     ]);
     res.send(html);
 
