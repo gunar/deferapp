@@ -158,6 +158,7 @@ api.get('/', user.isAdmin, function (req, res, next) {
       });
     };
 
+    // Aquisition: Unique users to land in the site
     const landed = {
       label: 'Landed',
       backgroundColor: randomColor(1),

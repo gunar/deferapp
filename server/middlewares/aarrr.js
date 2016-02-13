@@ -15,22 +15,19 @@ route.get('/', function(req, res, next) {
     const notOwnSite = !/deferapp.com/.test(referer);
     const firstVisit = !req.session.referer;
 
-    if (hasReferer && notOwnSite) {
-
-      if (firstVisit) {
-        Log.create({
-          type: 'user_landed',
-          data: {
-            referer: referer,
-            ip: req.ip,
-            url: req.originalUrl
-          }
-        }).catch(e => logger.error('DB Log error:', e));
-      }
-
-      req.session.referer = referer;
-
+    if (firstVisit) {
+      Promise.resolve(Log.create({
+        type: 'user_landed',
+        data: {
+          referer: referer,
+          ip: req.ip,
+          url: req.originalUrl
+        }
+      })).catch(e => logger.error('DB Log error:', e));
     }
+
+    req.session.referer = referer || 1;
+
   }
   
 
