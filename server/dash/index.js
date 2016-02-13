@@ -135,6 +135,7 @@ api.get('/', user.isAdmin, function (req, res, next) {
   Promise.all([
     datasetFor('user_landed'),
     datasetFor('user_signed_in'),
+    uniqueUserVisitsByDay(),
     // datasetFor('user_opened_reader'),
     // datasetFor('user_archived_tweet'),
   ]).then(rawDatasets => {
@@ -160,6 +161,7 @@ api.get('/', user.isAdmin, function (req, res, next) {
 
     const user_landed = datasets[0];
     const user_signed_in = datasets[1];
+    const unique_user_visits = datasets[2];
     // const user_opened_reader = datasets[1];
     // const user_archived_tweet = datasets[3];
 
@@ -181,8 +183,14 @@ api.get('/', user.isAdmin, function (req, res, next) {
       backgroundColor: randomColor(1),
       data: cohortize(user_signed_in, landed),
     };
+    const activated_1 = {
+      label: 'Activated 1/2',
+      backgroundColor: randomColor(1),
+      data: cohortize(unique_user_visits, engaged),
+    };
 
     const html = makeHTML([
+      activated_1,
       engaged,
       landed,
     ]);
