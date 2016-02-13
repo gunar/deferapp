@@ -24,6 +24,7 @@
 
 1. User has read and archived at least one tweet
  [x] Track user site opening
+ [x] Track user opening site
  [x] Track user archiving
 
 

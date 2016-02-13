@@ -55,25 +55,51 @@ const makeHTML = (datasets) => {
   return html;
 };
 
-function datasetFor(type) {
-  return Promise.resolve(Log.mapReduce({
-    query: { type: type },
-    map: function () {
-      var date = new Date(this.date);
-      var dateKey = [date.getFullYear(), date.getMonth()+1, date.getDate()].join('-');
-      emit(dateKey, 1);
-    },
-    reduce: function (k, values) {
-      return values.length;
-    },
-  })).then(results => results.map(o => ({ date: o._id, value: o.value })));
-}
+const datasetFor = type =>
+  Promise.resolve(
+    Log.mapReduce(
+      {
+        query: { type: type },
+        map: function () {
+          var date = new Date(this.date);
+          var dateKey = [date.getFullYear(), date.getMonth()+1, date.getDate()].join('-');
+          emit(dateKey, 1);
+        },
+        reduce: function (k, values) {
+          return values.length;
+        },
+      }
+    )
+  ).then(results => results.map(o => ({ date: o._id, value: o.value })));
 
 const uniqueUserVisitsByDay = () =>
   Promise.resolve(
     Log.mapReduce(
       {
         query: { type: 'request', 'data.url': '/' },
+        map: function () {
+          var date = new Date(this.date);
+          var dateKey = [date.getFullYear(), date.getMonth()+1, date.getDate()].join('-');
+          emit(dateKey, this.data.uid || 0);
+        },
+        reduce: function (k, values) {
+          var uniques = [];
+          for (var i = 0; i < values.length; i++) {
+            if (uniques.indexOf(values[i]) == -1) {
+              uniques.push(values[i]);
+            }
+          }
+          return { uniques: uniques.length };
+        },
+      }
+    )
+  ).then(results => results.map(o => ({ date: o._id, value: (o.value.uniques || 1) })));
+
+const uniqueUserReadsByDay = () =>
+  Promise.resolve(
+    Log.mapReduce(
+      {
+        query: { type: 'user_opened_reader' },
         map: function () {
           var date = new Date(this.date);
           var dateKey = [date.getFullYear(), date.getMonth()+1, date.getDate()].join('-');
@@ -136,6 +162,7 @@ api.get('/', user.isAdmin, function (req, res, next) {
     datasetFor('user_landed'),
     datasetFor('user_signed_in'),
     uniqueUserVisitsByDay(),
+    uniqueUserReadsByDay(),
     // datasetFor('user_opened_reader'),
     // datasetFor('user_archived_tweet'),
   ]).then(rawDatasets => {
@@ -162,6 +189,7 @@ api.get('/', user.isAdmin, function (req, res, next) {
     const user_landed = datasets[0];
     const user_signed_in = datasets[1];
     const unique_user_visits = datasets[2];
+    const unique_user_read = datasets[3];
     // const user_opened_reader = datasets[1];
     // const user_archived_tweet = datasets[3];
 
@@ -174,22 +202,28 @@ api.get('/', user.isAdmin, function (req, res, next) {
 
     // Aquisition: Unique users to land in the site
     const landed = {
-      label: 'Landed',
+      label: 'Acquired: Landed',
       backgroundColor: randomColor(1),
       data: user_landed,
     };
     const engaged = {
-      label: 'Engaged',
+      label: 'Acquired: Engaged',
       backgroundColor: randomColor(1),
       data: cohortize(user_signed_in, landed),
     };
     const activated_1 = {
-      label: 'Activated 1/2',
+      label: 'Activated: Open',
       backgroundColor: randomColor(1),
       data: cohortize(unique_user_visits, engaged),
     };
+    const activated_2 = {
+      label: 'Activated: Read',
+      backgroundColor: randomColor(1),
+      data: cohortize(unique_user_read, activated_1),
+    };
 
     const html = makeHTML([
+      activated_2,
       activated_1,
       engaged,
       landed,
