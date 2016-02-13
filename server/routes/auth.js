@@ -15,15 +15,21 @@ router.get('/auth/callback', (req, res, next) => {
     if (!user) { return res.redirect('/'); }
 
     if (user.new) {
-      Log.create({
+      Promise.resolve(Log.create({
         type: 'user_signed_in',
         data: {
           uid: user.uid,
           referer: req.session.referer,
         }
-      }).catch(e => logger.error('DB Log error:', e));
+      })).catch(e => logger.error('DB Log error:', e));
     } else {
-      // TODO
+      Promise.resolve(Log.create({
+        type: 'user_logged_in',
+        data: {
+          uid: user.uid,
+          referer: req.session.referer,
+        }
+      })).catch(e => logger.error('DB Log error:', e));
     }
 
 
