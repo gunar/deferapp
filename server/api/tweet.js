@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 
 const User = mongoose.model('User');
 const TagList = mongoose.model('TagList');
+const Log = mongoose.model('Log');
 const api = express.Router();
 
 const ENV = process.env.NODE_ENV || 'development';
@@ -189,6 +190,18 @@ api.get('/tweet/:tags/:from_tid',
 api.post('/tweet/:tags/:tid', passport.authOnly,
   function (req, res, next) {
     const tags = req.params.tags.split(',');
+
+    if (tags.indexOf('archived') > -1) {
+      Promise.resolve(Log.create({
+        type: 'user_archived_tweet',
+        data: {
+          uid: req.user.uid,
+          tid: req.params.tid,
+        }
+      })).catch(e => logger.error('DB Log error:', e));
+    }
+
+
     TagList
       .findOne({tid: parseInt(req.params.tid, 10), uid: req.user.uid})
       .exec(function (err, tweet) {

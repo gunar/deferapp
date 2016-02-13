@@ -1,9 +1,11 @@
-const TEST = process.env.NODE_ENV === 'test';
 import fetch from 'isomorphic-fetch';
+
+const TEST = process.env.NODE_ENV === 'test';
+const baseUrl = (TEST ? 'http://www.deferapp.com' : '');
+
 
 export const toggleTweet = (tid, tags) => {
   return dispatch => {
-    let url;
     const archived = tags.indexOf('archived') > -1;
     if (archived) {
       dispatch({
@@ -16,7 +18,7 @@ export const toggleTweet = (tid, tags) => {
         tid,
       });
     }
-    url = (TEST ? 'http://www.deferapp.com' : '') + '/api/tweet/archived/' + tid;
+    const url = baseUrl + '/api/tweet/archived/' + tid;
     return Promise.resolve(fetch(
       url,
       {
@@ -36,14 +38,13 @@ export const receiveTweets = (json = {}) => ({
 
 export const fetchTweets = (fromTid = 0, filter = []) => {
   return dispatch => {
-    let url = (TEST ? 'http://www.deferapp.com' : '');
     dispatch({
       type: 'REQUEST_TWEETS',
       fromTid,
       filter,
     });
 
-    url = url + ((filter.length > 0) ? '/api/tweet/' + filter.join(',') + '/' : '/api/tweet/');
+    const url = baseUrl + '/api/tweet/' + (filter.length > 0 ? filter.join(',') + '/' : '');
 
     return Promise.resolve(fetch(
       url + fromTid,
@@ -55,3 +56,24 @@ export const fetchTweets = (fromTid = 0, filter = []) => {
     .then(json => dispatch(receiveTweets(json)));
   };
 };
+
+export const openReader = (url = '', tid = 0) => {
+  fetch(baseUrl + '/api/log/open_reader', {
+    credentials: 'same-origin',
+    method: 'post',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ url, tid }),
+  });
+
+  return {
+    type: 'OPEN_READER',
+    url,
+  };
+};
+
+export const closeReader = () => ({
+  type: 'CLOSE_READER',
+});

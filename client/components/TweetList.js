@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
 import Tweet from './Tweet';
-import EmptyTweetList from '../containers/EmptyTweetList';
 
 const TweetList = ({
   tweets,
@@ -12,7 +11,6 @@ const TweetList = ({
         {...tweet}
       />
     ))}
-    <EmptyTweetList />
   </div>
 );
 

@@ -13,9 +13,6 @@ const AppBar = ({
           <a>{ showArchived ? "archive" : "inbox" }</a>
         </div>
       </div>
-      {/*<div className="brand middle">
-        <img src="/logo_b.svg" style={{height: "2rem", marginBottom: "-.5rem"}} />
-      </div>*/}
     </div>
   );
 };
