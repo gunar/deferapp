@@ -38,10 +38,12 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(require('./server/middlewares/aarrr'));
-app.use(express.static('./dist'));
 
 // Logging middleware
 app.use(require('./server/middlewares/log'));
+
+app.use(express.static('./dist'));
+
 
 app.use('/dash/', require('./server/dash/'));
 
