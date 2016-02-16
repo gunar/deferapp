@@ -197,7 +197,10 @@ api.get('/tweetfetch/:tid/', passport.authOnly,
       .then(t => {
         if (t.tweet.entities && t.tweet.entities.urls && t.tweet.entities.urls.length) {
           var url = t.tweet.entities.urls[0].expanded_url;
-          fetch.get(url).pipe(res);
+          fetch.get(url)
+            .then(html => {
+              res.send(html);
+            });
         } else {
           res.send('No urls on this tweet.');
         }
