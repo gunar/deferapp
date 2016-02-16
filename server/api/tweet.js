@@ -1,7 +1,8 @@
 const express = require('express');
 const passport = require('passport');
 const mongoose = require('mongoose');
-const rp = require('request-promise');
+const fetch = require('isomorphic-fetch');
+const URL = require('url');
 
 const User = mongoose.model('User');
 const TagList = mongoose.model('TagList');
@@ -191,16 +192,22 @@ api.get('/tweet/:tags/:from_tid',
 
 api.get('/tweetfetch/:tid/', passport.authOnly,
   function (req, res, next) {
-    var fetch = rp.defaults({followAllRedirects: true});
+    // var fetch = rp.defaults({followAllRedirects: true});
     Tweet
       .findOne({tid: req.params.tid}).exec()
       .then(t => {
         if (t.tweet.entities && t.tweet.entities.urls && t.tweet.entities.urls.length) {
-          var url = t.tweet.entities.urls[0].expanded_url;
-          fetch.get(url)
+          var url = URL.parse(t.tweet.entities.urls[0].expanded_url);
+          var domain = url.protocol+'//'+url.host+'/';
+          fetch(url.href)
+            .then(response => {
+              return response.text();
+            })
             .then(html => {
+              html = html.replace(/(src|href)=[\"\']\/{1}(\w.+)[\"\']/igm, '$1="'+domain+'$2"')
               res.send(html);
-            });
+            })
+            .catch(e => console.log(e));
         } else {
           res.send('No urls on this tweet.');
         }
