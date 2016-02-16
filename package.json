@@ -38,6 +38,7 @@
     "passport-twitter": "^1.0.4",
     "q": "^1.4.1",
     "react-waypoint": "^1.2.3",
+    "request-promise": "^2.0.0",
     "twitter": "^1.2.5",
     "winston": "^2.1.1"
   },
