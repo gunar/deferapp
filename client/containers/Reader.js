@@ -15,7 +15,7 @@ const Reader = ({ isOpen, url, tid, dispatch }) => {
         {/*<div className="btn bullet"><a><i className="mdi mdi-check"/> Archive</a></div>*/}
       </div>
       <div className="container">
-        {isOpen ? <iframe src={"/api/tweetfetch/"+tid}></iframe> : null }
+        {isOpen ? <iframe sandbox="allow-scripts allow-same-origin" src={"/api/tweetfetch/"+tid}></iframe> : null }
       </div>
     </div>
   );

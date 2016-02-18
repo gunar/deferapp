@@ -3,12 +3,15 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 const fetch = require('isomorphic-fetch');
 const URL = require('url');
+const unshortener = require('unshortener');
 
 const User = mongoose.model('User');
 const TagList = mongoose.model('TagList');
 const Tweet = mongoose.model('Tweet');
 const Log = mongoose.model('Log');
 const api = express.Router();
+
+const parse = require('../parse.js');
 
 const ENV = process.env.NODE_ENV || 'development';
 const PAGE_LENGTH = 20;
@@ -199,15 +202,26 @@ api.get('/tweetfetch/:tid/', passport.authOnly,
         if (t.tweet.entities && t.tweet.entities.urls && t.tweet.entities.urls.length) {
           var url = URL.parse(t.tweet.entities.urls[0].expanded_url);
           var domain = url.protocol+'//'+url.host+'/';
-          fetch(url.href)
-            .then(response => {
-              return response.text();
-            })
+
+          unshortener.expand(url.href, (err, expandedURL) => {
+            if (err) return logger.error(err);
+
+            // Test for youtube URL
+            const yt = parse.getYouTubeID(expandedURL.href);
+            if (yt) {
+              res.send('<style>'+parse.iframeCSS+'</style><iframe height="100%" src="https://www.youtube.com/embed/'+yt+'?rel=0&autoplay=1" allowfullscreen></iframe>');
+            }
+
+            fetch(expandedURL.href)
+            .then(response => response.text())
             .then(html => {
               html = html.replace(/(src|href)=[\"\']\/{1}(\w.+)[\"\']/igm, '$1="'+domain+'$2"')
-              res.send(html);
-            })
-            .catch(e => console.log(e));
+                                  res.send(html);
+            }).catch(e => logger.error(e));
+
+          });
+
+
         } else {
           res.send('No urls on this tweet.');
         }
