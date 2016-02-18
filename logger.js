@@ -21,7 +21,7 @@ var logger = function (path, prefix, level) {
       filename: fsPath.join(path, prefix + '-' + level + '.log'),
       level: level,
       json: true,
-      maxsize: 5*1024,
+      maxsize: 5*1024*1024,
       maxFiles: 5,
       colorize: false
     });

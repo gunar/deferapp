@@ -3,30 +3,46 @@ import fetch from 'isomorphic-fetch';
 const TEST = process.env.NODE_ENV === 'test';
 const baseUrl = (TEST ? 'http://www.deferapp.com' : '');
 
-
-export const toggleTweet = (tid, tags) => {
+export const unarchiveTweet = (tid) => {
   return dispatch => {
-    const archived = tags.indexOf('archived') > -1;
-    if (archived) {
-      dispatch({
-        type: 'UNARCHIVE_TWEET',
-        tid,
-      });
-    } else {
-      dispatch({
-        type: 'ARCHIVE_TWEET',
-        tid,
-      });
-    }
+    dispatch({
+      type: 'UNARCHIVE_TWEET',
+      tid,
+    });
     const url = baseUrl + '/api/tweet/archived/' + tid;
     return Promise.resolve(fetch(
       url,
       {
         credentials: 'same-origin',
-        method: (archived ? 'delete' : 'post'),
+        method: 'delete',
       }
     ));
   };
+};
+
+export const archiveTweet = (tid) => {
+  return dispatch => {
+    dispatch({
+      type: 'ARCHIVE_TWEET',
+      tid,
+    });
+    const url = baseUrl + '/api/tweet/archived/' + tid;
+    return Promise.resolve(fetch(
+      url,
+      {
+        credentials: 'same-origin',
+        method: 'post',
+      }
+    ));
+  };
+};
+
+export const toggleTweet = (tid, tags) => {
+  const archived = tags.indexOf('archived') > -1;
+  if (archived) {
+    return unarchiveTweet(tid);
+  }
+  return archiveTweet(tid);
 };
 
 export const receiveTweets = (json = {}) => ({
@@ -57,7 +73,7 @@ export const fetchTweets = (fromTid = 0, filter = []) => {
   };
 };
 
-export const openReader = (url = '', tid = 0) => {
+export const openReader = (url = '', tid = 0, allowScript = false) => {
   fetch(baseUrl + '/api/log/open_reader', {
     credentials: 'same-origin',
     method: 'post',
@@ -71,7 +87,8 @@ export const openReader = (url = '', tid = 0) => {
   return {
     type: 'OPEN_READER',
     url,
-    tid
+    tid,
+    allowScript,
   };
 };
 

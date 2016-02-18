@@ -1,3 +1,5 @@
+var parse = require('./server/parse.js');
+
 module.exports = function crawler(mongoose) {
   var _ = require('highland'),
       Twitter = require('twitter'),
@@ -157,20 +159,44 @@ module.exports = function crawler(mongoose) {
 
       if (!stored) {
         // Tweet not yet stored
-        newTweet = new Tweet({
-          tid: tid,
-          tweet: tweet.content,
-          parsed: {}
-        });
-        logger.silly('New tweet\t', + tid);
+
+        const hasURL = tweet.content.entities && tweet.content.entities.urls && tweet.content.entities.urls.length;
+        if (!hasURL) {
+          newTweet = new Tweet({
+            tid: tid,
+            tweet: tweet.content,
+            parsed: {},
+            allowScript: false,
+          });
+          logger.silly('New tweet\t', + tid);
+          return _(newTweet.save().then(function () { return { uid: uid, tid: tid  }; }));
+        }
+
+        // has URL
+        logger.silly('New tweet\t', tid, 'has URL so checking shouldAllowScript now');
+
+        return _(
+          parse.shouldAllowScript(tweet.content.entities.urls[0].expanded_url || '')
+          .then(allowScript => {
+            newTweet = new Tweet({
+              tid: tid,
+              tweet: tweet.content,
+              parsed: {},
+              allowScript,
+            });
+            logger.silly('Saving '+tid+' now... shouldAllowScript=' + allowScript);
+            return newTweet.save();
+          })
+          .then(function () { return { uid: uid, tid: tid  }; })
+        );
 
       } else {
         // Tweet already stored
         newTweet = stored;
         newTweet.tweet = tweet.content;
         logger.silly('Updating tweet ' + tid);
+        return _(newTweet.save().then(function () { return { uid: uid, tid: tid  }; }));
       }
-      return _(newTweet.save().then(function () { return { uid: uid, tid: tid  }; }));
     });
   };
 

@@ -1,13 +1,17 @@
 const express = require('express');
 const passport = require('passport');
 const mongoose = require('mongoose');
-const rp = require('request-promise');
+const fetch = require('isomorphic-fetch');
+const URL = require('url');
+const unshortener = require('unshortener');
 
 const User = mongoose.model('User');
 const TagList = mongoose.model('TagList');
 const Tweet = mongoose.model('Tweet');
 const Log = mongoose.model('Log');
 const api = express.Router();
+
+const parse = require('../parse.js');
 
 const ENV = process.env.NODE_ENV || 'development';
 const PAGE_LENGTH = 20;
@@ -55,12 +59,14 @@ const unwindTweet = t => {
     media = fullTweet.entities.media.map(m => m.media_url_https);
   }
 
+
   return {
     tid: t.tid,
     tags: t.tags,
     tweet,
     user,
     url,
+    allowScript: t.tweet.allowScript || false,
     media,
   };
 };
@@ -156,51 +162,75 @@ const visitorTweets = (tag, fromTid) => {
   return { data, visitor: true };
 };
 
-api.get('/tweet/:from_tid',
-  function (req, res, next) {
-    if (!req.user) {
-      // Default tweets for not logged user
-      res.json(visitorTweets('inbox', req.params.from_tid));
-      return;
-    }
-    getTweetsByTags(req.user.uid, [], req.params.from_tid)
-      .then(docs => {
-        // TODO: filter out tweets with no links
-        res.json({data: docs.map(unwindTweet)});
-      }, err => {
-        res.status(500).json({message: err});
-      });
+const sendTweets = (res, uid, tags, from_tid) => {
+  tags = tags || [];
+  from_tid = from_tid || 0;
+
+  getTweetsByTags(uid, tags, from_tid)
+  .then(docs => res.json({data: docs.map(unwindTweet)}))
+  .catch(err => {
+    res.status(500).json({message: err})
+    logger.error(err);
+  });
+
+};
+
+api.get('/tweet/:from_tid', passport.authOnly, (req, res, next) => {
+  if (!req.user) {
+    // Default tweets for not logged user
+    return res.json(visitorTweets('inbox', req.params.from_tid));
+  }
+  return sendTweets(res, req.user.uid, [], req.params.from_tid);
 });
 
-api.get('/tweet/:tags/:from_tid',
-  function (req, res, next) {
-    if (!req.user) {
-      // Default tweets for not logged user
-      res.json(visitorTweets('archived', req.params.from_tid));
-      return;
-    }
-    const tags = req.params.tags.split(',');
-    getTweetsByTags(req.user.uid, tags, req.params.from_tid)
-      .then(docs => {
-        res.json({data: docs.map(unwindTweet)});
-      }, err => {
-        res.status(500).json({message: err});
-      });
+api.get('/tweet/:tags/:from_tid', passport.authOnly, (req, res, next) => {
+  if (!req.user) {
+    // Default tweets for not logged user
+    return res.json(visitorTweets('archived', req.params.from_tid));
   }
-);
+  const tags = req.params.tags.split(',');
+  return sendTweets(res, req.user.uid, tags, req.params.from_tid);
+});
 
-api.get('/tweetfetch/:tid/', passport.authOnly,
+api.get('/goto/:tid/?', passport.authOnly,
   function (req, res, next) {
-    var fetch = rp.defaults({followAllRedirects: true});
     Tweet
       .findOne({tid: req.params.tid}).exec()
       .then(t => {
         if (t.tweet.entities && t.tweet.entities.urls && t.tweet.entities.urls.length) {
-          var url = t.tweet.entities.urls[0].expanded_url;
-          fetch.get(url)
-            .then(html => {
-              res.send(html);
-            });
+          var url = URL.parse(t.tweet.entities.urls[0].expanded_url);
+          res.redirect(301, url.href);
+        }
+      });
+  }
+);
+
+api.get('/fetch/:tid/?', passport.authOnly,
+  function (req, res, next) {
+    // var fetch = rp.defaults({followAllRedirects: true});
+    Tweet
+      .findOne({tid: req.params.tid}).exec()
+      .then(t => {
+        if (t.tweet.entities && t.tweet.entities.urls && t.tweet.entities.urls.length) {
+          var url = URL.parse(t.tweet.entities.urls[0].expanded_url);
+
+          unshortener.expand(url.href, (err, expandedURL) => {
+            if (err) return logger.error(err);
+
+            // Test for youtube URL
+            const yt = parse.getYouTubeID(expandedURL.href);
+            if (yt) {
+              return res.send('<style>'+parse.iframeCSS+'</style><iframe height="100%" src="https://www.youtube.com/embed/'+yt+'?rel=0&autoplay=1" allowfullscreen></iframe>');
+            }
+
+            fetch(expandedURL.href)
+              .then(response => response.text())
+              .then(html => res.send(html.replace('<head>', '<head><base href="'+expandedURL.href+'" target="_blank">')))
+              .catch(e => logger.error(e));
+
+          });
+
+
         } else {
           res.send('No urls on this tweet.');
         }
