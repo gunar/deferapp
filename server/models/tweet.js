@@ -4,7 +4,8 @@ var mongoose = require('mongoose'),
 var TweetSchema = new Schema({
   tid: Number,
   tweet: {},
-  parsed: {}
+  parsed: {},
+  allowScript: Boolean,
 });
 
 TweetSchema.index({ tid: 1 });
