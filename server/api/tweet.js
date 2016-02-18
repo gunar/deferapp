@@ -129,7 +129,7 @@ const visitorTweets = (tag, fromTid) => {
       tweet: {
         favorite_count: 1,
         retweet_count: 32,
-        text: 'The Toggle takes you to your archived tweets.',
+        text: 'The button "Inbox" up there takes you to your archived tweets.',
         created_at: 'Sun Jan 31 19:58:04 +0000 2016',
       },
       user: {
@@ -175,7 +175,7 @@ const sendTweets = (res, uid, tags, from_tid) => {
 
 };
 
-api.get('/tweet/:from_tid', passport.authOnly, (req, res, next) => {
+api.get('/tweet/:from_tid', (req, res, next) => {
   if (!req.user) {
     // Default tweets for not logged user
     return res.json(visitorTweets('inbox', req.params.from_tid));
@@ -183,7 +183,7 @@ api.get('/tweet/:from_tid', passport.authOnly, (req, res, next) => {
   return sendTweets(res, req.user.uid, [], req.params.from_tid);
 });
 
-api.get('/tweet/:tags/:from_tid', passport.authOnly, (req, res, next) => {
+api.get('/tweet/:tags/:from_tid', (req, res, next) => {
   if (!req.user) {
     // Default tweets for not logged user
     return res.json(visitorTweets('archived', req.params.from_tid));
