@@ -10,23 +10,6 @@ const visitorTweets = (tag, fromTid) => {
       tweet: {
         favorite_count: 1,
         retweet_count: 32,
-        text: 'Hi! Tweets you Like will appear here.',
-        created_at: 'Sun Jan 31 19:58:04 +0000 2016',
-      },
-      user: {
-        profile_image_url_https: 'https://pbs.twimg.com/profile_images/658644694667235328/J8sTA5or_normal.jpg',
-        screen_name: 'leokewitz',
-        name: 'Leonardo Kewitz',
-      },
-      url: [ 'http://www.leokewitz.com' ],
-      media: [],
-    },
-    {
-      tid: 2,
-      tags: [],
-      tweet: {
-        favorite_count: 1,
-        retweet_count: 32,
         text: 'The button "Inbox" up there takes you to your archived tweets.',
         created_at: 'Sun Jan 31 19:58:04 +0000 2016',
       },
@@ -36,6 +19,23 @@ const visitorTweets = (tag, fromTid) => {
         name: 'Gunar C. Gessner',
       },
       url: [ 'http://gunargessner.com' ],
+      media: [],
+    },
+    {
+      tid: 2,
+      tags: [],
+      tweet: {
+        favorite_count: 1,
+        retweet_count: 32,
+        text: 'Hi there! I\'m Leo. Me and Gunar created Defer and I hope you like it.',
+        created_at: 'Sun Jan 31 19:58:04 +0000 2016',
+      },
+      user: {
+        profile_image_url_https: 'https://pbs.twimg.com/profile_images/658644694667235328/J8sTA5or_normal.jpg',
+        screen_name: 'leokewitz',
+        name: 'Leonardo Kewitz',
+      },
+      url: [ 'http://www.leokewitz.com' ],
       media: [],
     },
   ];

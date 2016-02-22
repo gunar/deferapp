@@ -145,8 +145,23 @@ api.get('/goto/:tid/?', passport.authOnly,
   }
 );
 
-api.get('/fetch/:tid/?', passport.authOnly,
+api.get('/fetch/:tid/?', //passport.authOnly,
   function (req, res, next) {
+    if (!req.user) {
+      // Visitor
+      const tid = req.params.tid;
+      const visitorURLs = [
+        'http://www.leokewitz.com',
+        'http://gunargessner.com',
+      ];
+      const url = visitorURLs[tid-1];
+      fetch(url)
+        .then(response => response.text())
+        .then(html => res.send(html.replace('<head>', '<head><base href="'+url+'" target="_blank">')))
+        .catch(e => logger.error(e));
+
+      return;
+    }
     // var fetch = rp.defaults({followAllRedirects: true});
     Tweet
       .findOne({tid: req.params.tid}).exec()
