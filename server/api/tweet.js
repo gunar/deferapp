@@ -12,6 +12,7 @@ const Log = mongoose.model('Log');
 const api = express.Router();
 
 const parse = require('../parse.js');
+const visitorTweets = require('./visitorTweets.js');
 
 const ENV = process.env.NODE_ENV || 'development';
 const PAGE_LENGTH = 20;
@@ -26,6 +27,7 @@ const filterObject = (obj, keys) =>
     ;
 
 
+// TODO: This function is named uncorrectly
 const unwindTweet = t => {
   'use strict';
   const fullTweet = t.tweet.tweet;
@@ -84,82 +86,22 @@ const getTweetsByTags = (uid, tags, from_tid) => {
     match['tid'] = { $lt: Number(from_tid) };
   }
 
-  return TagList
-          .aggregate({
-            $lookup: {
-              from: 'tweets',
-              localField: 'tid',
-              foreignField: 'tid',
-              as: 'tweet',
-            }
-          })
-          .unwind('tweet')
-          .match(match)
-          .sort('-tid')
-          .limit(PAGE_LENGTH)
-          .exec();
-};
-
-const visitorTweets = (tag, fromTid) => {
-  if (fromTid && fromTid > 0) {
-    // Return empty if asks for 2nd page in visitor mode
-    return { data: [], visitor: true };
-  }
-  const data = [
-    {
-      tid: 1,
-      tags: [],
-      tweet: {
-        favorite_count: 1,
-        retweet_count: 32,
-        text: 'Hi! Tweets you Like will appear here.',
-        created_at: 'Sun Jan 31 19:58:04 +0000 2016',
-      },
-      user: {
-        profile_image_url_https: 'https://pbs.twimg.com/profile_images/658644694667235328/J8sTA5or_normal.jpg',
-        screen_name: 'leokewitz',
-        name: 'Leonardo Kewitz',
-      },
-      url: [ 'http://www.leokewitz.com' ],
-      media: [],
-    },
-    {
-      tid: 2,
-      tags: [],
-      tweet: {
-        favorite_count: 1,
-        retweet_count: 32,
-        text: 'The button "Inbox" up there takes you to your archived tweets.',
-        created_at: 'Sun Jan 31 19:58:04 +0000 2016',
-      },
-      user: {
-        profile_image_url_https: 'https://pbs.twimg.com/profile_images/652617748976148480/mFA1kzAm_normal.jpg',
-        screen_name: 'gunar',
-        name: 'Gunar C. Gessner',
-      },
-      url: [ 'http://gunargessner.com' ],
-      media: [],
-    },
-    {
-      tid: 3,
-      tags: [ 'archived' ],
-      tweet: {
-        favorite_count: 1,
-        retweet_count: 32,
-        text: 'Told ya ;)',
-        created_at: 'Sun Jan 31 19:58:04 +0000 2016',
-      },
-      user: {
-        profile_image_url_https: 'https://pbs.twimg.com/profile_images/652617748976148480/mFA1kzAm_normal.jpg',
-        screen_name: 'gunar',
-        name: 'Gunar C. Gessner',
-      },
-      url: [ 'http://gunargessner.com' ],
-      media: [],
-    },
-  ];
-
-  return { data, visitor: true };
+  return Promise.resolve(
+    TagList
+      .aggregate({
+        $lookup: {
+          from: 'tweets',
+          localField: 'tid',
+          foreignField: 'tid',
+          as: 'tweet',
+        }
+      })
+      .unwind('tweet')
+      .match(match)
+      .sort('-tid')
+      .limit(PAGE_LENGTH)
+      .exec()
+  );
 };
 
 const sendTweets = (res, uid, tags, from_tid) => {
@@ -174,6 +116,8 @@ const sendTweets = (res, uid, tags, from_tid) => {
   });
 
 };
+
+// TODO: Move all visitor routes to a single file
 
 api.get('/tweet/:from_tid', (req, res, next) => {
   if (!req.user) {
@@ -205,8 +149,25 @@ api.get('/goto/:tid/?', passport.authOnly,
   }
 );
 
-api.get('/fetch/:tid/?', passport.authOnly,
+api.get('/fetch/:tid/?', //passport.authOnly,
   function (req, res, next) {
+    if (!req.user) {
+      // Visitor
+      const tid = req.params.tid;
+      const visitorURLs = [
+        'http://gunargessner.com',
+        'https://medium.com/i-m-h-o/stop-trying-to-be-funny-on-twitter-150186463d91#.bosdzckfn',
+        'http://www.leokewitz.com',
+        'http://www.leokewitz.com',
+      ];
+      const url = visitorURLs[tid-1];
+      fetch(url)
+        .then(response => response.text())
+        .then(html => res.send(html.replace('<head>', '<head><base href="'+url+'" target="_blank">')))
+        .catch(e => logger.error(e));
+
+      return;
+    }
     // var fetch = rp.defaults({followAllRedirects: true});
     Tweet
       .findOne({tid: req.params.tid}).exec()
@@ -237,8 +198,12 @@ api.get('/fetch/:tid/?', passport.authOnly,
       });
 });
 
-api.post('/tweet/:tags/:tid', passport.authOnly,
+api.post('/tweet/:tags/:tid', //passport.authOnly,
   function (req, res, next) {
+    if (!req.user) {
+      // Visitor
+      return res.sendStatus(200);
+    }
     const tags = req.params.tags.split(',');
 
     if (tags.indexOf('archived') > -1) {
@@ -267,8 +232,12 @@ api.post('/tweet/:tags/:tid', passport.authOnly,
       });
 });
 
-api.delete('/tweet/:tags/:tid', passport.authOnly,
+api.delete('/tweet/:tags/:tid', //passport.authOnly,
   function (req, res, next) {
+    if (!req.user) {
+      // Visitor
+      return ;res.sendStatus(200);
+    }
     const tags = req.params.tags.split(',');
     TagList
       .findOne({tid: req.params.tid, uid: req.user.uid})

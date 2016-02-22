@@ -17,8 +17,10 @@ module.exports = function(passport, config) {
   passport.authOnly = function(req, res, next) {
     if (!req.isAuthenticated())
       res.redirect('/auth');
-    else
+    else {
       next();
+      req.session.touch()
+    }
   };
 
   passport.use('twitter', new TwitterStrategy({

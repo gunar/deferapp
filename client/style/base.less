@@ -7,7 +7,7 @@
 
 // @primary: #60A0B0;
 @primary: #333;
-@link: lighten(@primary, 30%);
+@link: lighten(@primary, 10%);
 @text: #000;
 
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,300,700,400italic);
@@ -32,6 +32,18 @@ a {
 }
 
 body #root .appbar {
+  .btn {
+    float: left;
+    margin-left: 10px;
+
+    &:first-of-type {
+      margin-left: 0;
+    }
+    @media (min-width: @bp-larger-than-desktop) {
+      float: auto;
+      margin-left: auto;
+    }
+  }
   position: fixed;
   top: 0px;
   z-index: 100;
@@ -119,7 +131,11 @@ body #root .appbar {
       float: left;
       height: 48px;
       margin-right: 10px;
-      img { border-radius: 50%; }
+      img {
+        border-radius: 50%;
+        max-width: 48px;
+        max-height: 48px;
+      }
     }
     .info {
       float: left;

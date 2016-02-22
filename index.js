@@ -33,6 +33,7 @@ app.use(session({
 	saveUninitialized: true, // don't create session until something stored
 	resave: false, //don't save session if unmodified
 	secret: 'all your base are belong to us.',
+  cookie: { maxAge: 1.577e+10 }, // 6 months of inactivity.
 	store: new MongoStore({ mongooseConnection: mongoose.connection})
 }));
 app.use(passport.initialize());

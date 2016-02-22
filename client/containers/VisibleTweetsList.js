@@ -12,6 +12,7 @@ const VisibleTweetsList = ({
   tweets,
   loadMore,
   dispatch,
+  filter,
 }) => {
   return (
     <div style={{ marginTop: 0 }}>
@@ -24,7 +25,7 @@ const VisibleTweetsList = ({
           }))
         }
       />
-      <Waypoint onEnter={loadMore} scrollableParent={window} threshold={0.1}/>
+      <Waypoint key={filter.join(',')} onEnter={loadMore} scrollableParent={window} threshold={0.1}/>
       <EmptyTweetList />
       <LoadingSpinner />
     </div>
@@ -34,6 +35,7 @@ const VisibleTweetsList = ({
 VisibleTweetsList.propTypes = {
   tweets: PropTypes.array.isRequired,
   loadMore: PropTypes.func.isRequired,
+  filter: PropTypes.array,
 };
 
 const notArchived = t => t.tags.indexOf('archived') === -1;
@@ -52,10 +54,11 @@ const mapStateToProps = (state) => ({
 
 const mergeProps = (stateProps, { dispatch }, ownProps) => {
   const hasTweetsBeingDisplayed = stateProps.tweets.length > 0;
-  let fromTid = 0;
 
+  let fromTid = 0;
   if (hasTweetsBeingDisplayed) {
-    fromTid = stateProps.tweets.slice(-1)[0].tid;
+    const lastTweet = stateProps.tweets.slice(-1)[0];
+    fromTid = lastTweet.tid;
   }
 
   return {

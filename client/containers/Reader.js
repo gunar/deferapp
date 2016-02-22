@@ -16,9 +16,10 @@ const Reader = ({
     dispatch(archiveTweet(tid));
     dispatch(closeReader());
   };
-  const sandbox = 'allow-popups allow-same-origin' + ( allowScript ? ' allow-scripts' : '');
+  const sandbox = 'allow-popups allow-same-origin' + (allowScript ? ' allow-scripts' : '');
+  const iframeURL = `/api/fetch/${tid}`;
   return (
-    <div className={ "reader" + (isOpen ? " open" : "") }>
+    <div className={ 'reader' + (isOpen ? ' open' : '') }>
       <div className="close_area" onClick={close}></div>
       <div className="controls">
       <div className="btn bullet" onClick={close}><a><i className="mdi mdi-arrow-left"/> Return</a></div>
@@ -26,7 +27,7 @@ const Reader = ({
       <div className="btn bullet" onClick={archive}><a><i className="mdi mdi-check"/> Archive</a></div>
       </div>
       <div className="container">
-        {isOpen ? <iframe sandbox={sandbox} referrerpolicy="no-referrer" src={"/api/fetch/"+tid}></iframe> : null }
+        {isOpen ? <iframe sandbox={sandbox} referrerpolicy="no-referrer" src={iframeURL}></iframe> : null }
       </div>
     </div>
   );
