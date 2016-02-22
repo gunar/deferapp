@@ -25,6 +25,7 @@ const logger = require('./logger')(config.logs_dir, 'server', 'info');
 
 const app = express();
 const MongoStore = require('connect-mongo')(session);
+app.enable('trust proxy');
 
 require('./server/init.passport')(passport, config);
 app.use(require('compression')());
