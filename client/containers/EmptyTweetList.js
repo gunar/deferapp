@@ -20,7 +20,7 @@ const EmptyTweetList = ({
       { isInbox ?
         <div>
         <p style={{ marginBottom: '3em' }}>You're inbox is empty.</p>
-        <p><a target="_blank" className="btn sqrd" href="https://twitter.com">Go to <i className="mdi mdi-twitter" /> and <i className="mdi mdi-heart" /> something</a></p>
+        <p><a target="_blank" className="btn sqrd" href="https://twitter.com">Go <i className="mdi mdi-heart" /> something</a></p>
         <p style={{ fontSize: 'small' }}>(usually take less than a minute to sync with Twitter)</p>
         </div>
           :

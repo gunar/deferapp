@@ -86,20 +86,22 @@ const getTweetsByTags = (uid, tags, from_tid) => {
     match['tid'] = { $lt: Number(from_tid) };
   }
 
-  return TagList
-          .aggregate({
-            $lookup: {
-              from: 'tweets',
-              localField: 'tid',
-              foreignField: 'tid',
-              as: 'tweet',
-            }
-          })
-          .unwind('tweet')
-          .match(match)
-          .sort('-tid')
-          .limit(PAGE_LENGTH)
-          .exec();
+  return Promise.resolve(
+    TagList
+      .aggregate({
+        $lookup: {
+          from: 'tweets',
+          localField: 'tid',
+          foreignField: 'tid',
+          as: 'tweet',
+        }
+      })
+      .unwind('tweet')
+      .match(match)
+      .sort('-tid')
+      .limit(PAGE_LENGTH)
+      .exec()
+  );
 };
 
 const sendTweets = (res, uid, tags, from_tid) => {
@@ -114,6 +116,8 @@ const sendTweets = (res, uid, tags, from_tid) => {
   });
 
 };
+
+// TODO: Move all visitor routes to a single file
 
 api.get('/tweet/:from_tid', (req, res, next) => {
   if (!req.user) {
@@ -145,8 +149,25 @@ api.get('/goto/:tid/?', passport.authOnly,
   }
 );
 
-api.get('/fetch/:tid/?', passport.authOnly,
+api.get('/fetch/:tid/?', //passport.authOnly,
   function (req, res, next) {
+    if (!req.user) {
+      // Visitor
+      const tid = req.params.tid;
+      const visitorURLs = [
+        'http://gunargessner.com',
+        'https://medium.com/i-m-h-o/stop-trying-to-be-funny-on-twitter-150186463d91#.bosdzckfn',
+        'http://www.leokewitz.com',
+        'http://www.leokewitz.com',
+      ];
+      const url = visitorURLs[tid-1];
+      fetch(url)
+        .then(response => response.text())
+        .then(html => res.send(html.replace('<head>', '<head><base href="'+url+'" target="_blank">')))
+        .catch(e => logger.error(e));
+
+      return;
+    }
     // var fetch = rp.defaults({followAllRedirects: true});
     Tweet
       .findOne({tid: req.params.tid}).exec()
@@ -177,8 +198,12 @@ api.get('/fetch/:tid/?', passport.authOnly,
       });
 });
 
-api.post('/tweet/:tags/:tid', passport.authOnly,
+api.post('/tweet/:tags/:tid', //passport.authOnly,
   function (req, res, next) {
+    if (!req.user) {
+      // Visitor
+      return res.sendStatus(200);
+    }
     const tags = req.params.tags.split(',');
 
     if (tags.indexOf('archived') > -1) {
@@ -207,8 +232,12 @@ api.post('/tweet/:tags/:tid', passport.authOnly,
       });
 });
 
-api.delete('/tweet/:tags/:tid', passport.authOnly,
+api.delete('/tweet/:tags/:tid', //passport.authOnly,
   function (req, res, next) {
+    if (!req.user) {
+      // Visitor
+      return ;res.sendStatus(200);
+    }
     const tags = req.params.tags.split(',');
     TagList
       .findOne({tid: req.params.tid, uid: req.user.uid})

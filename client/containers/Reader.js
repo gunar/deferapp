@@ -9,7 +9,6 @@ const Reader = ({
   tid,
   allowScript,
   dispatch,
-  isVisitor,
 }) => {
   const close = () => dispatch(closeReader());
   const open = () => window.open(url);
@@ -17,10 +16,10 @@ const Reader = ({
     dispatch(archiveTweet(tid));
     dispatch(closeReader());
   };
-  const sandbox = 'allow-popups allow-same-origin' + ( allowScript ? ' allow-scripts' : '');
-  const iframeURL = isVisitor ? url : `/api/fetch/${tid}`;
+  const sandbox = 'allow-popups allow-same-origin' + (allowScript ? ' allow-scripts' : '');
+  const iframeURL = `/api/fetch/${tid}`;
   return (
-    <div className={ "reader" + (isOpen ? " open" : "") }>
+    <div className={ 'reader' + (isOpen ? ' open' : '') }>
       <div className="close_area" onClick={close}></div>
       <div className="controls">
       <div className="btn bullet" onClick={close}><a><i className="mdi mdi-arrow-left"/> Return</a></div>
@@ -47,7 +46,6 @@ const mapStateToProps = (state) => ({
   url: state.reader.url,
   tid: state.reader.tid,
   allowScript: state.reader.allowScript,
-  isVisitor: state.visitor,
 });
 
 export default connect(mapStateToProps)(Reader);
