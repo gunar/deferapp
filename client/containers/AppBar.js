@@ -7,10 +7,10 @@ const AppBar = ({
 }) => {
   const toggleFilter = () => dispatch({ type: 'TOGGLE_FILTER' });
   return (
-    <div className={ showArchived ? "appbar archive" : "appbar inbox" }>
+    <div className={ showArchived ? 'appbar archive' : 'appbar inbox' }>
       <div className="left">
-        <div className={ showArchived ? "btn bullet active" : "btn bullet" } onClick={toggleFilter}>
-          <a>{ showArchived ? "archive" : "inbox" }</a>
+        <div className={ showArchived ? 'btn bullet active' : 'btn bullet' } onClick={toggleFilter}>
+          <a>{ showArchived ? 'archvie' : 'inbox' }</a>
         </div>
       </div>
     </div>

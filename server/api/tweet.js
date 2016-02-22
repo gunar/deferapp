@@ -12,6 +12,7 @@ const Log = mongoose.model('Log');
 const api = express.Router();
 
 const parse = require('../parse.js');
+const visitorTweets = require('./visitorTweets.js');
 
 const ENV = process.env.NODE_ENV || 'development';
 const PAGE_LENGTH = 20;
@@ -26,6 +27,7 @@ const filterObject = (obj, keys) =>
     ;
 
 
+// TODO: This function is named uncorrectly
 const unwindTweet = t => {
   'use strict';
   const fullTweet = t.tweet.tweet;
@@ -98,68 +100,6 @@ const getTweetsByTags = (uid, tags, from_tid) => {
           .sort('-tid')
           .limit(PAGE_LENGTH)
           .exec();
-};
-
-const visitorTweets = (tag, fromTid) => {
-  if (fromTid && fromTid > 0) {
-    // Return empty if asks for 2nd page in visitor mode
-    return { data: [], visitor: true };
-  }
-  const data = [
-    {
-      tid: 1,
-      tags: [],
-      tweet: {
-        favorite_count: 1,
-        retweet_count: 32,
-        text: 'Hi! Tweets you Like will appear here.',
-        created_at: 'Sun Jan 31 19:58:04 +0000 2016',
-      },
-      user: {
-        profile_image_url_https: 'https://pbs.twimg.com/profile_images/658644694667235328/J8sTA5or_normal.jpg',
-        screen_name: 'leokewitz',
-        name: 'Leonardo Kewitz',
-      },
-      url: [ 'http://www.leokewitz.com' ],
-      media: [],
-    },
-    {
-      tid: 2,
-      tags: [],
-      tweet: {
-        favorite_count: 1,
-        retweet_count: 32,
-        text: 'The button "Inbox" up there takes you to your archived tweets.',
-        created_at: 'Sun Jan 31 19:58:04 +0000 2016',
-      },
-      user: {
-        profile_image_url_https: 'https://pbs.twimg.com/profile_images/652617748976148480/mFA1kzAm_normal.jpg',
-        screen_name: 'gunar',
-        name: 'Gunar C. Gessner',
-      },
-      url: [ 'http://gunargessner.com' ],
-      media: [],
-    },
-    {
-      tid: 3,
-      tags: [ 'archived' ],
-      tweet: {
-        favorite_count: 1,
-        retweet_count: 32,
-        text: 'Told ya ;)',
-        created_at: 'Sun Jan 31 19:58:04 +0000 2016',
-      },
-      user: {
-        profile_image_url_https: 'https://pbs.twimg.com/profile_images/652617748976148480/mFA1kzAm_normal.jpg',
-        screen_name: 'gunar',
-        name: 'Gunar C. Gessner',
-      },
-      url: [ 'http://gunargessner.com' ],
-      media: [],
-    },
-  ];
-
-  return { data, visitor: true };
 };
 
 const sendTweets = (res, uid, tags, from_tid) => {
