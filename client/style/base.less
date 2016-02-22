@@ -205,7 +205,7 @@ body #root .appbar {
     left: 0;
     top: 0;
     height: 100%;
-    width: 38.2%;
+    width: 100%;
     position: absolute;
     cursor: pointer;
   }
@@ -221,6 +221,7 @@ body #root .appbar {
     }
   }
   .container {
+    background-color: white; // for sites with no bg defined
     right: 0;
     top: 0;
     height: 100%;
@@ -237,6 +238,7 @@ body #root .appbar {
   @media (min-width: @bp-larger-than-desktop) {
     .container {
       width: 61.8%;
+      right: 19.2%;
     }
   }
 }
