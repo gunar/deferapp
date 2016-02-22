@@ -86,20 +86,22 @@ const getTweetsByTags = (uid, tags, from_tid) => {
     match['tid'] = { $lt: Number(from_tid) };
   }
 
-  return TagList
-          .aggregate({
-            $lookup: {
-              from: 'tweets',
-              localField: 'tid',
-              foreignField: 'tid',
-              as: 'tweet',
-            }
-          })
-          .unwind('tweet')
-          .match(match)
-          .sort('-tid')
-          .limit(PAGE_LENGTH)
-          .exec();
+  return Promise.resolve(
+    TagList
+      .aggregate({
+        $lookup: {
+          from: 'tweets',
+          localField: 'tid',
+          foreignField: 'tid',
+          as: 'tweet',
+        }
+      })
+      .unwind('tweet')
+      .match(match)
+      .sort('-tid')
+      .limit(PAGE_LENGTH)
+      .exec()
+  );
 };
 
 const sendTweets = (res, uid, tags, from_tid) => {
