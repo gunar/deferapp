@@ -73,7 +73,8 @@ if (ENV === 'development') {
   }));
 }
 
-if (ENV !== 'development') {
+if (ENV !== 'development' || process.argv.includes('--crawler')) {
+  logger.debug('Running crawler...');
   var crawler = require('./crawler')(mongoose);
   crawler.each(function (user) {
       // this functions consumes the Highland stream
