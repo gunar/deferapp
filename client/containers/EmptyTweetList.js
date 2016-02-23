@@ -11,7 +11,7 @@ const EmptyTweetList = ({
   }
 
   return (
-    <div style={{ textAlign: 'center' }}>
+    <div style={{ textAlign: 'center', marginTop: '3rem' }}>
       <i className={ isInbox ? 'mdi mdi-inbox' : 'mdi mdi-archive'} style={{
         fontSize: 200,
         lineHeight: '150px',
