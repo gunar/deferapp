@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const ENV = process.env.NODE_ENV || 'development';
 
@@ -13,6 +14,7 @@ const config = {
   plugins: [
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.OccurenceOrderPlugin(),
+    new ExtractTextPlugin("style.css", { allChunks: true }),
   ],
   resolve: {
   //   alias: {
@@ -27,7 +29,8 @@ const config = {
     loaders: [
       { test: /\.jsx?$/, loaders: ['react-hot', 'babel'],
         include: path.join(__dirname, 'client'), exclude: /node_modules/},
-      { test: /\.less$/, loader: 'style-loader!css-loader!less-loader' },
+      // { test: /\.less$/, loader: 'style-loader!css-loader!less-loader' },
+      { test: /\.less$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader!less-loader') },
     ],
   },
 };
@@ -43,7 +46,8 @@ if (ENV === 'production') {
 } else {
   // Replace config.plugins
   config.devtool = 'eval';
-  config.plugins = [new webpack.HotModuleReplacementPlugin()];
+  // config.plugins = [new webpack.HotModuleReplacementPlugin()];
+  config.plugins.push(new webpack.HotModuleReplacementPlugin());
   config.entry = [
     // 'webpack-dev-server/client?http://localhost:3000',
     'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000&reload=true',
