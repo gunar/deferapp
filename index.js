@@ -25,6 +25,7 @@ const logger = require('./logger')(config.logs_dir, 'server', 'info');
 
 const app = express();
 const MongoStore = require('connect-mongo')(session);
+app.enable('trust proxy');
 
 require('./server/init.passport')(passport, config);
 app.use(require('compression')());
@@ -72,7 +73,8 @@ if (ENV === 'development') {
   }));
 }
 
-if (ENV !== 'development') {
+if (ENV !== 'development' || process.argv.includes('--crawler')) {
+  logger.debug('Running crawler...');
   var crawler = require('./crawler')(mongoose);
   crawler.each(function (user) {
       // this functions consumes the Highland stream
