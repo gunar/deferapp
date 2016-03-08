@@ -50,6 +50,7 @@ export const receiveTweets = (json = {}) => ({
   tweets: json.data || [],
   receivedAt: Date.now(),
   visitor: !!json.visitor || false,
+  uid: json.uid,
 });
 
 export const fetchTweets = (fromTid = 0, filter = []) => {
@@ -73,7 +74,14 @@ export const fetchTweets = (fromTid = 0, filter = []) => {
   };
 };
 
-export const openReader = (url = '', tid = 0, allowScript = false) => {
+export const openReader = (url = '', tid = 0, allowScript = false, uid) => {
+  ga('send', {
+    hitType: 'event',
+    eventCategory: 'tweet',
+    eventAction: 'openReader',
+    eventLabel: 'default',
+    userId: uid,
+  })
   fetch(baseUrl + '/api/log/open_reader', {
     credentials: 'same-origin',
     method: 'post',

@@ -4,6 +4,7 @@ import loading from './loading';
 import visitor from './visitor';
 import filter from './filter';
 import reader from './reader';
+import user from './user';
 
 const rootReducer = combineReducers({
   tweets,
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
   visitor,
   filter,
   reader,
+  user,
 });
 
 export default rootReducer;

@@ -13,6 +13,7 @@ const VisibleTweetsList = ({
   loadMore,
   dispatch,
   filter,
+  user,
 }) => {
   return (
     <div style={{ marginTop: 0 }}>
@@ -21,7 +22,7 @@ const VisibleTweetsList = ({
           tweets.map(t => ({
             ...t,
             toggleTweet: () => dispatch(toggleTweet(t.tid, t.tags)),
-            openReader: () => dispatch(openReader(t.url[0], t.tid, t.allowScript)),
+            openReader: () => dispatch(openReader(t.url[0], t.tid, t.allowScript, user)),
           }))
         }
       />
@@ -35,6 +36,7 @@ const VisibleTweetsList = ({
 VisibleTweetsList.propTypes = {
   tweets: PropTypes.array.isRequired,
   loadMore: PropTypes.func.isRequired,
+  dispatch: PropTypes.func.isRequired,
   filter: PropTypes.array,
 };
 
@@ -50,6 +52,7 @@ const mapStateToProps = (state) => ({
   filter: state.filter,
   isInfiniteLoading: state.loading,
   loading: state.loading,
+  user: state.user,
 });
 
 const mergeProps = (stateProps, { dispatch }, ownProps) => {

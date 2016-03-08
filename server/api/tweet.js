@@ -109,7 +109,10 @@ const sendTweets = (res, uid, tags, from_tid) => {
   from_tid = from_tid || 0;
 
   getTweetsByTags(uid, tags, from_tid)
-  .then(docs => res.json({data: docs.map(unwindTweet)}))
+  .then(docs => res.json({
+    data: docs.map(unwindTweet),
+    uid,
+  }))
   .catch(err => {
     res.status(500).json({message: err})
     logger.error(err);
