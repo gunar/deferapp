@@ -73,7 +73,7 @@ if (ENV === 'development') {
   }));
 }
 
-if (ENV !== 'development' || process.argv.includes('--crawler')) {
+if (ENV !== 'development' || process.argv.indexOf('--crawler') > -1) {
   logger.debug('Running crawler...');
   var crawler = require('./crawler')(mongoose);
   crawler.each(function (user) {
