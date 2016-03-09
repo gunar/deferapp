@@ -14,7 +14,7 @@ const visitorTweets = (tag, fromTid) => {
         created_at: 'Sun Jan 31 19:58:04 +0000 2016',
       },
       user: {
-        profile_image_url_https: 'https://pbs.twimg.com/profile_images/652617748976148480/mFA1kzAm_normal.jpg',
+        profile_image_url_https: 'https://pbs.twimg.com/profile_images/704359736578318337/gxEY3azk_normal.jpg',
         screen_name: 'gunar',
         name: 'Gunar C. Gessner',
       },

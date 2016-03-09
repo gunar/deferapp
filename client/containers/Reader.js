@@ -36,8 +36,8 @@ const Reader = ({
 Reader.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   url: PropTypes.string.isRequired,
-  tid: PropTypes.number.isRequired,
-  allowScript: PropTypes.bool.isRequried,
+  tid: PropTypes.number,
+  allowScript: PropTypes.bool,
   dispatch: PropTypes.func.isRequired,
 };
 

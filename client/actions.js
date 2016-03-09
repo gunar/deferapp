@@ -53,13 +53,23 @@ export const receiveTweets = (json = {}) => ({
   uid: json.uid,
 });
 
-export const fetchTweets = (fromTid = 0, filter = []) => {
+export const fetchTweets = (fromTid = 0, filter = [], uid = 0) => {
   return dispatch => {
     dispatch({
       type: 'REQUEST_TWEETS',
       fromTid,
       filter,
     });
+    const gaObj = {
+      hitType: 'event',
+      eventCategory: 'tweet',
+      eventAction: 'fetchTweets',
+      eventLabel: filter.join(',') || 'default',
+    };
+    if (uid !== 0) {
+      gaObj.userId = uid;
+    }
+    ga('send', gaObj);
 
     const url = baseUrl + '/api/tweet/' + (filter.length > 0 ? filter.join(',') + '/' : '');
 
@@ -74,14 +84,17 @@ export const fetchTweets = (fromTid = 0, filter = []) => {
   };
 };
 
-export const openReader = (url = '', tid = 0, allowScript = false, uid) => {
-  ga('send', {
+export const openReader = (url = '', tid = 0, allowScript = false, uid = 0) => {
+  const gaObj = {
     hitType: 'event',
     eventCategory: 'tweet',
     eventAction: 'openReader',
     eventLabel: 'default',
-    userId: uid,
-  })
+  };
+  if (uid !== 0) {
+    gaObj.userId = uid;
+  }
+  ga('send', gaObj);
   fetch(baseUrl + '/api/log/open_reader', {
     credentials: 'same-origin',
     method: 'post',

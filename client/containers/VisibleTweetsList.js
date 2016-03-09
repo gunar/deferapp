@@ -26,7 +26,7 @@ const VisibleTweetsList = ({
           }))
         }
       />
-      <Waypoint key={filter.join(',')} onEnter={loadMore} scrollableParent={window} threshold={0.1}/>
+      <Waypoint key={filter.join(',')} onEnter={loadMore} threshold={0.1}/>
       <EmptyTweetList />
       <LoadingSpinner />
     </div>
@@ -67,7 +67,7 @@ const mergeProps = (stateProps, { dispatch }, ownProps) => {
   return {
     ...ownProps,
     ...stateProps,
-    loadMore: () => dispatch(fetchTweets(fromTid, stateProps.filter)),
+    loadMore: () => dispatch(fetchTweets(fromTid, stateProps.filter, stateProps.user)),
     dispatch,
   };
 };
