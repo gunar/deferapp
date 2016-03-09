@@ -44,6 +44,7 @@ app.use(require('./server/middlewares/aarrr'));
 // Logging middleware
 app.use(require('./server/middlewares/log'));
 
+app.use(require('./server/routes/index'));
 app.use(express.static('./dist'));
 
 
