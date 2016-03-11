@@ -1,3 +1,5 @@
+const fetch = require('isomorphic-fetch');
+const analytics = require('../analytics');
 var passport = require('passport'),
     mongoose = require('mongoose'),
     express = require('express');
@@ -21,7 +23,14 @@ router.get('/auth/callback', (req, res, next) => {
           uid: user.uid,
           referer: req.session.referer,
         }
-      })).catch(e => logger.error('DB Log error:', e));
+      })).catch(e => console.error('DB Log error:', e));
+      Promise.resolve(fetch(
+        'http://www.google-analytics.com/collect',
+        {
+          method: 'POST',
+          body: `v=1&t=event&tid=${analytics.tid}&cid=${user.uid}&ec=user&ea=signin`,
+        }
+      )).catch(console.error);
     } else {
       Promise.resolve(Log.create({
         type: 'user_logged_in',
@@ -29,7 +38,14 @@ router.get('/auth/callback', (req, res, next) => {
           uid: user.uid,
           referer: req.session.referer,
         }
-      })).catch(e => logger.error('DB Log error:', e));
+      })).catch(e => console.error('DB Log error:', e));
+      Promise.resolve(fetch(
+        'http://www.google-analytics.com/collect',
+        {
+          method: 'POST',
+          body: `v=1&t=event&tid=${analytics.tid}&cid=${user.uid}&ec=user&ea=login`,
+        }
+      )).catch(console.error);
     }
 
 

@@ -85,7 +85,7 @@ export const openReader = (url = '', tid = 0, allowScript = false, uid = 0) => {
     hitType: 'event',
     eventCategory: 'tweet',
     eventAction: 'openReader',
-    eventLabel: 'default',
+    eventValue: tid,
   });
   fetch(baseUrl + '/api/log/open_reader', {
     credentials: 'same-origin',
