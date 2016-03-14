@@ -11,7 +11,7 @@ router.get('/', (req, res, next) => {
   if (!req.user) {
     return res.send(indexVisitor);
   }
-  const indexUser = index.replace('/*gacreate*/', `ga('create', '${analytics.tid}', {userId: ${req.user.uid}})`);
+  const indexUser = index.replace('/*gacreate*/', `ga('create', '${analytics.tid}', 'auto', {'userId': '${req.user.uid}'})`);
   return res.send(indexUser)
 });
 
